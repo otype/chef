@@ -6,17 +6,17 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-package "openssh-server" do
-    action [:install]
-end
+package "openssh-server"
 
 template "/etc/ssh/sshd_config" do
-    source "sshd_config.erb"
-    mode 0755
-    owner "root"
-    group "root"
+  source "sshd_config.erb"
+  mode 0644
+  owner "root"
+  group "root"
+  notifies :restart, "service[ssh]", :immediately
+  notifies :enable, "service[ssh]"
 end
 
-service "openssh" do
-    action[:enable,:start]
+service "ssh" do
+  action :nothing
 end

@@ -19,7 +19,7 @@ execute "iptables-restore" do
   user "root"
   group "root"
   action :run
-  notifies :start, "execute[iptables-save]", :immediately
+  notifies :run, "execute[iptables-save]", :immediately
 end
 
 execute "iptables-save" do
@@ -27,4 +27,14 @@ execute "iptables-save" do
   user "root"
   group "root"
   action :nothing
+end
+
+execute "network-interfaces" do
+  command "sed -i 's#\(iface lo inet loopback\)#\1\npre-up iptables-restore < /etc/iptables.up.rules#' /etc/network/interfaces"
+  user "root"
+  group "root"
+  action :nothing
+  not_if do
+    `cat /etc/network/interfaces | grep iptables-restore | wc -l` > 0
+  end
 end

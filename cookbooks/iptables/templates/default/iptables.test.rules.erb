@@ -22,14 +22,14 @@
 # Allow ALL Access only from designated hosts
 # (includes MySQL 3306, ssh 22022, etc.)
 #
--A INPUT -p tcp -s 46.182.19.3    --sport 1024:65535 -d <%= node[:ip] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
--A INPUT -p tcp -s 46.182.19.26   --sport 1024:65535 -d <%= node[:ip] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
--A INPUT -p tcp -s 178.63.225.109 --sport 1024:65535 -d <%= node[:ip] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
--A INPUT -p tcp -s 178.63.225.112 --sport 1024:65535 -d <%= node[:ip] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
--A INPUT -p tcp -s 178.63.225.113 --sport 1024:65535 -d <%= node[:ip] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
--A INPUT -p tcp -s 178.63.225.114 --sport 1024:65535 -d <%= node[:ip] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
--A INPUT -p tcp -s 178.63.225.116 --sport 1024:65535 -d <%= node[:ip] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
--A INPUT -p tcp -s 178.63.225.118 --sport 1024:65535 -d <%= node[:ip] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 46.182.19.3    --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 46.182.19.26   --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.109 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.112 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.113 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.114 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.116 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.118 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
 
 # Allow ping
 -A INPUT -p icmp -m icmp --icmp-type 8 -j ACCEPT
