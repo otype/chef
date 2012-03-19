@@ -30,11 +30,13 @@ execute "iptables-save" do
 end
 
 execute "network-interfaces" do
-  command "sed -i 's#\(iface lo inet loopback\)#\1\npre-up iptables-restore < /etc/iptables.up.rules#' /etc/network/interfaces"
+  command "echo 'pre-up iptables-restore < /etc/iptables.up.rules' >> /etc/network/interfaces"
   user "root"
   group "root"
-  action :nothing
-  not_if do
-    `cat /etc/network/interfaces | grep iptables-restore | wc -l` > 0
+  action :run
+  only_if do
+    lines = `cat /etc/network/interfaces | grep iptables-restore`
+    Chef::Log.info "Lines found? -> #{lines.empty?}"
+    lines.empty?
   end
 end
