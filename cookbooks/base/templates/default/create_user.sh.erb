@@ -1,0 +1,20 @@
+#!/bin/bash
+useradd -c 'Hans-Gunther Schmidt' -s /bin/bash -m hgschmidt
+useradd -c 'Sebastian Engel' -s /bin/bash -m sengel
+
+sed -i 's#^hgschmidt.*$#hgschmidt:$6$aukPPPNh$ECL/gkebrS/WHoUNtNytNPH3aEpr0PlY.izREz3shw0lDmK0I8YQA6MOANBo.nI.bxb9Jtqr0MsHx8n0iqLLG0:15418:0:99999:7:::#g' /etc/shadow
+sed -i 's/^sengel.*$/sengel:$6$kSc8qfex$.5CPsKW6lkP3bnxOvpZ2vd0z3vQpm72sekqSBPIOKuk9m.OjesqrNIksgh7JXvsG1QOQ/jFRCaCW6mZMUJy0q.:15413:0:99999:7:::/g' /etc/shadow
+
+#echo 'hgschmidt:$6$aukPPPNh$ECL/gkebrS/WHoUNtNytNPH3aEpr0PlY.izREz3shw0lDmK0I8YQA6MOANBo.nI.bxb9Jtqr0MsHx8n0iqLLG0:15418:0:99999:7:::' >> /etc/shadow
+#echo 'sengel:$6$kSc8qfex$.5CPsKW6lkP3bnxOvpZ2vd0z3vQpm72sekqSBPIOKuk9m.OjesqrNIksgh7JXvsG1QOQ/jFRCaCW6mZMUJy0q.:15413:0:99999:7:::' >> /etc/shadow
+
+mkdir /home/hgschmidt/.ssh
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAEAQDH04r78CqWzOs1r/Y8RTIX0oLBsVlySvHKD503RicR6oZ3b4a6BJLHs1sR/7cHFjq67hXWFxl/Jbs6gFh7ETbyoDO0nwtyrixu8nASMrUztpSJrLWsVG6BN2oqoOz/CCfqJvXVzL9HBe0/irt4e6pjASbSsRAbrWR4PnwdgDClT36xmkWSGuiewfqmRb4eFM8RsIxF4u0PWoCOwutVcHW6+qBSzDwbE+bkVfldgQVzvb/U42juEzwUG0aguLB7uMAsbomCftKaiv46iVP0EPtzyP4AoPhiknaLLkGZs3DJ2Q7pPmlGdmY9ICrKadlUI3DIFEUMET8lwPfDnFzT3m1/sMKBemCpq3BYeUn/MgMc1V1vCv36RaftJ8bGHFrSf/oPqKbe27nkfyurUKcgnc2YeiCdAGwb2Ww0vCCjOqvBzs9yYg/zsDLbPiQNtJVIAk8ITj8CIPz8kUbgkWqTKh/u+9eBamZr3fHSnoKp4mqXS8JbWItm/XtJu5vJS2Ox3VCJvzuoUAKeJmOJhhxAj4B9aO4TnnqPmPU0LBcKdUNXEj4Z9AVVLOut5Y34S7d+BGOvCMLzxkYc1LHpJaubkUGvsVTvEFkEg96Ob7TuVccArRqrFYex2Gs/al4FlBY+06cEc2jcuLjLAmITHhg5diQ3C3BGxUob8GS+OE+80YR3z0IaSajxI8IJDd+HyQNPU/PmDblrFFBRxfT05LUf4IieOhkkB9JGRf0PUzx8I9h3onKCmpY4uRgMQ9rXx6XmrpIlDydPCc20h3foRQAdEweRDzbU53j4AGWj200BYLU4QAD85EwO+BASXQCyWtULFnHL6ybhC2/r4iQUsu94L5gAILMSoAx3A3DlNFEAPRtUhhiCo4ifVP+fVGDF5NM4RNoOr8krmhAdl+lkUza4U/+fc4MPlDpdAHcBpa9Hk82GW0fCRuwwpwHmZOsh370qsiAvxBfraS2R5oP/Y/OmsMhcItj5ewC/SeCQpLgNqmNGQOboiPQvetoYK/4xmmgQCal4DjmG1B9+hCB5bbiOF0SNdNB0DsylWzqUHpdAFx8qEdjmZ2KEUovOW1S/ELjRAmWokUmTw9B7orsKrWesdzzFWMAKkjiPg+R1iJbpH3QPf8hiu0nNoMdfFW22XJADd9nNgAz0a8kTI+0IBM+NAOfMTlK8YCnaoR6GMuP3Fn4lrUhDvsYzqpQyPkWLLtazulMoybCKWH0BRUc+KaY4OmqShMWrL9NSisxfat55xsN1ipXodcwLrJGj/IXH4r2z7AhY+2n90oSONqWAbLLDMKNY0yFYTNOq8XisOAboctDU8WfXIBnpcysBhUgonsOoI9ZMwg2CaORhqcued/p7Y3+3 hgschmidt@imac27.localdomain' >> /home/hgschmidt/.ssh/authorized_keys
+chown -R hgschmidt:hgschmidt /home/hgschmidt/.ssh
+
+mkdir /home/sengel/.ssh
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDSUtesH8s1lspV6QCPLb/XxAflBnnAUKQ2X8TOejHYAmyPkYF+rs2gmKgFt7xZHU71irQ0xh+gUdYihi2D8fRTikJBI80uNTCvyaBa+REyglKo5QO3uDu5S/WpDFOcL7wJNCgu749vSywb4omu31fqdCPw503pLJZVNB383Dg0XetTbvwdi8LWFuEvyvxz+1iVl+/JmvLTKAgW15WpJY930O3G3kua/4Br7CG6J8n3BEIJlk8N0NqNalhBIJ5lvc6O1l3A6NCuxRRWOYWK2v9ZhmE2w1zJ431foBjNsav1qwtaExGeW9XFqdwgzrDiw33JBTX7x6XLNGXyXQB5WDvwZNegUYWKRKsV5rAbZG06Dg/ScJx2aH7KHGwVlzQYT50fRErI91Gkt/cREfJbzl8xRh5PGI+tJ62HLN52N6FS8XojswYnjYKnfnYQ20TAm64NVRUFhxVayvL+9gimtGbd2v/5BYwW7889R89KE7lsN8xn0CN3EWcPBZvmC9p6VRsMOW05EDao4Hgg2g0ZJuypXasVq2SDUmZ77+AnmWaN0MkxVINzYIgY+PCuQwB731Nc09Of2HBxX6cCVi3k5vRD7kK50ttAfL5gUiJ/k6WbqOB3xsX/a3drbu+STlDUvwxbyv1DjjPIEYHcOfYjmTxt6Bz4i73DUYlAxT6B1WY3wQ== Sebastian Engel - engel.sebastian@gmail.com' >> /home/sengel/.ssh/authorized_keys
+chown -R sengel:sengel /home/sengel/.ssh
+
+echo "hgschmidt ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+echo "sengel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers

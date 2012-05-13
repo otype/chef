@@ -1,0 +1,45 @@
+*filter
+
+#  Allows all loopback (lo0) traffic and drop all traffic to 127/8 that doesn't use lo0
+-A INPUT -i lo -j ACCEPT
+-A INPUT ! -i lo -d 127.0.0.0/8 -j REJECT
+
+#  Accepts all established inbound connections
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+#  Allows all outbound traffic
+#  You can modify this to only allow certain traffic
+-A OUTPUT -j ACCEPT
+
+#  Allows SSH connections
+#
+# THE -dport NUMBER IS THE SAME ONE YOU SET UP IN THE SSHD_CONFIG FILE
+#
+#-A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW --dport 22022 -j ACCEPT
+
+#
+# Allow ALL Access only from designated hosts
+# (includes MySQL 3306, ssh 22022, etc.)
+#
+-A INPUT -p tcp -s 46.182.19.3    --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 46.182.19.26   --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.109 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.112 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.113 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.114 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.116 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 178.63.225.118 --sport 1024:65535 -d <%= node[:ipaddress] %> --dport 1024:65535 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# Allow ping
+-A INPUT -p icmp -m icmp --icmp-type 8 -j ACCEPT
+
+# log iptables denied calls
+-A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
+
+# Reject all other inbound - default deny unless explicitly allowed policy
+-A INPUT -j REJECT
+-A FORWARD -j REJECT
+
+COMMIT
+
