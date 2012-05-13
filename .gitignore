@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 *.iml
 .idea/
 .DS_Store
+=======
+.rake_test_cache
+
+.idea/
+>>>>>>> 88c47a57000914265e817a417261dd24fa168f0a
