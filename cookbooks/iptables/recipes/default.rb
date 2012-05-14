@@ -12,6 +12,7 @@ template "/etc/iptables.test.rules" do
   source "iptables.test.rules.erb"
   owner "root"
   group "root"
+  variables :nodes => search(:node, "*:*")
 end
 
 execute "iptables-restore" do
