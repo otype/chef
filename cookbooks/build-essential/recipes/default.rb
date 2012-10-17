@@ -30,6 +30,8 @@ when "centos","redhat","fedora"
       action :install
     end
   end
+  else
+    # nothing to do here
 end
 
 package "autoconf" do
