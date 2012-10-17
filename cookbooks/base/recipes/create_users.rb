@@ -2,12 +2,10 @@
 # Cookbook Name:: base
 # Recipe:: create_users
 #
-# Copyright 2012, YOUR_COMPANY_NAME
+# Copyright 2012, apitrary
 #
 # All rights reserved - Do Not Redistribute
 #
-package "htop"
-package "sudo"
 
 template "/root/create_user.sh" do
   source "create_user.sh.erb"
