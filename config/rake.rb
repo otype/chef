@@ -21,7 +21,7 @@ SSL_LOCALITY_NAME = "Berlin"
 SSL_ORGANIZATIONAL_UNIT_NAME = "Operations"
 
 # The SSL contact email address
-SSL_EMAIL_ADDRESS = "info@apitrary.com"
+SSL_EMAIL_ADDRESS = "official@apitrary.com"
 
 # License for new Cookbooks
 # Can be :apachev2 or :none
