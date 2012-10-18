@@ -1,6 +1,6 @@
 
 if(node[:nginx_simplecgi][:php])
-  template '/etc/init/nginx_phpwrap_dispatcher.conf' do
+  template '/etc/init.d/nginx_phpwrap_dispatcher.conf' do
     source 'upstart-phpwrap_dispatcher.erb'
     variables(
       :nginx_user => node[:nginx][:user],
@@ -19,7 +19,7 @@ if(node[:nginx_simplecgi][:php])
 end
 
 if(node[:nginx_simplecgi][:cgi])
-  template '/etc/init/nginx_cgiwrap_dispatcher.conf' do
+  template '/etc/init.d/nginx_cgiwrap_dispatcher.conf' do
     source 'upstart-cgiwrap_dispatcher.erb'
     variables(
       :dispatch_dir => node[:nginx_simplecgi][:dispatcher_directory],
