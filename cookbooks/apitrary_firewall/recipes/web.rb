@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: apitrary_firewall
-# Recipe:: ssh
+# Recipe:: web
 #
 # Copyright 2012, apitrary
 #
