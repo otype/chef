@@ -18,13 +18,15 @@
 # limitations under the License.
 #
 
+include_recipe "build-essential"
+
 configure_options = node['python']['configure_options'].join(" ")
 
 packages = value_for_platform(
     ["centos","redhat","fedora"] => 
-        {"default" => ["openssl-devel","bzip2-devel","zlib-devel","expat-devel","db4-devel","sqlite-devel","ncurses-devel","readline-devel"]},
+        {"default" => ["openssl-devel","bzip2-devel","zlib-devel","expat-devel","db4-devel","sqlite-devel","ncurses-devel","readline-devel", "curl"]},
     "default" => 
-        ["libssl-dev","libbz2-dev","zlib1g-dev","libexpat1-dev","libdb4.8-dev","libsqlite3-dev","libncursesw5-dev","libncurses5-dev","libreadline-dev"]
+        ["libssl-dev","libbz2-dev","zlib1g-dev","libexpat1-dev","libdb4.8-dev","libsqlite3-dev","libncursesw5-dev","libncurses5-dev","libreadline-dev", "bzip2", "curl"]
   )
 
 packages.each do |dev_pkg|
@@ -50,3 +52,6 @@ bash "build-and-install-python" do
   EOF
   not_if { ::File.exists?(install_path) }
 end
+
+execute "curl http://python-distribute.org/distribute_setup.py | python"
+execute "ln -s /usr/bin/easy_install /usr/local/bin/easy_install"
