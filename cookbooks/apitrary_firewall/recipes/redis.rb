@@ -9,10 +9,8 @@
 
 include_recipe "simple_iptables"
 
-# Allow HTTP/HTTPS
+# Allow Redis
 simple_iptables_rule "system" do
-  rule [
-           "-p tcp --dport 6379",
-       ]
+  rule "-p tcp --dport 6379"
   jump "ACCEPT"
 end
