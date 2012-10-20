@@ -26,7 +26,7 @@ packages = value_for_platform(
     ["centos","redhat","fedora"] => 
         {"default" => ["openssl-devel","bzip2-devel","zlib-devel","expat-devel","db4-devel","sqlite-devel","ncurses-devel","readline-devel", "curl"]},
     "default" => 
-        ["libssl-dev","libbz2-dev","zlib1g-dev","libexpat1-dev","libdb4.8-dev","libsqlite3-dev","libncursesw5-dev","libncurses5-dev","libreadline-dev", "bzip2", "curl"]
+        ["libssl-dev","libbz2-dev","zlib1g-dev","libexpat1-dev","libdb4.8-dev","libsqlite3-dev","libncursesw5-dev","libncurses5-dev","libreadline-dev", "bzip2", "curl", "libcurl3-dev", "protobuf-compiler"]
   )
 
 packages.each do |dev_pkg|
