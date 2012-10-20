@@ -54,4 +54,4 @@ bash "build-and-install-python" do
 end
 
 execute "curl http://python-distribute.org/distribute_setup.py | python"
-execute "ln -s /usr/bin/easy_install /usr/local/bin/easy_install"
+execute "ln -sf /usr/bin/easy_install /usr/local/bin/easy_install"
