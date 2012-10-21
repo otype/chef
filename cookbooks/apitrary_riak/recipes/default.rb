@@ -37,6 +37,7 @@ end
 
 execute "dpkg -i /tmp/riak_pkg/#{package_file}" do
   command "dpkg -i /tmp/riak_pkg/#{package_file}"
+  not_if { `dpkg --get-selections riak` != "" }
 end
 
 template "/etc/riak/app.config" do
