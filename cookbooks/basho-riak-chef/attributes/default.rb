@@ -98,6 +98,9 @@ default['riak']['config']['lager']['crash_log_date'] = "$D0".to_erl_string
 default['riak']['config']['lager']['crash_log_count'] = 5
 default['riak']['config']['lager']['error_logger_redirect'] = true
 
+# riak search
+default['riak']['config']['riak_search']['enabled'] = true
+
 # riak_sysmon
 default['riak']['config']['riak_sysmon']['process_limit'] = 30
 default['riak']['config']['riak_sysmon']['port_limit'] = 2
@@ -115,3 +118,5 @@ default['riak']['config']['riak_control']['enabled'] = false
 default['riak']['config']['riak_control']['auth'] = "userlist"
 default['riak']['config']['riak_control']['userlist'] = [["user".to_erl_string,"pass".to_erl_string].to_erl_tuple]
 default['riak']['config']['riak_control']['admin'] = true
+
+#
