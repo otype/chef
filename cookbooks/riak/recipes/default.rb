@@ -25,7 +25,13 @@ if node[:riak][:package][:url]
   package_file = package_uri.split("/").last
 else
   version_str = "#{node[:riak][:package][:version][:major]}.#{node[:riak][:package][:version][:minor]}"
+
+  # Orig
   base_uri = "http://downloads.basho.com/riak/riak-#{version_str}.#{node[:riak][:package][:version][:incremental]}/"
+
+  # Debian 6
+  base_uri = "http://s3.amazonaws.com/downloads.basho.com/riak/#{version_str}/#{version_str}.#{node[:riak][:package][:version][:incremental]}/debian/6/"
+
   base_filename = "riak-#{version_str}.#{node[:riak][:package][:version][:incremental]}"
 
 
@@ -42,6 +48,8 @@ else
                       if node[:platform_version] == "11.10"
                         "#{base_filename.gsub(/\-/, '_')}-#{node[:riak][:package][:version][:build]}_ubuntu_11_#{machines[node[:kernel][:machine]]}.deb"
                       else
+                        # "http://downloads.basho.com/riak/riak-1.2.1/riak_1.2.1-1_amd64.deb"
+                        # http://s3.amazonaws.com/downloads.basho.com/riak/1.2/1.2.1/debian/6/riak_1.2.1-1_amd64.deb
                         "#{base_filename.gsub(/\-/, '_')}-#{node[:riak][:package][:version][:build]}_#{machines[node[:kernel][:machine]]}.deb"
                       end
                     when "centos","redhat","suse"
