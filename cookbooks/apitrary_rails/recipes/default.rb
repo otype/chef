@@ -7,26 +7,9 @@
 # All rights reserved - Do Not Redistribute
 #
 include_recipe "user::default"
-
-#nodejs_installed_check = "ruby -v | grep #{ node[:ruby][:version].gsub( '-', '' ) }"
-
-%w(libpq-dev git-core curl build-essential openssl libssl-dev).each do |pkg|
-  package pkg do
-    action :install
-  end
-end
-
-execute "get & unpack node.js }" do
-  user "root"
-  command "cd /usr/src && wget -N http://nodejs.org/dist/v#{node[:nodejs][:version]}/node-v#{node[:nodejs][:version]}.tar.gz && tar xzf node-v#{ node[:nodejs][:version] }.tar.gz && cd node-v#{ node[:nodejs][:version] }"
-  #not_if nodejs_installed_check
-end
-
-execute "configure & make #{ node[:nodejs][:version] }" do
-  user "root"
-  command "cd /usr/src/node-v#{ node[:nodejs][:version] } && ./configure && make && make install"
-  #not_if ruby_installed_check
-end
+include_recipe "carlo-chef-ruby1.9::default"
+include_recipe "apitrary_passenger_nginx::default"
+include_recipe "apitrary_nodejs::default"
 
 %w(rails).each do |g|
   gem_package g do

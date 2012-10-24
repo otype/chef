@@ -1,0 +1,19 @@
+server {
+    listen <%= @port %>;
+    server_name <%= @hostname %>;
+
+    access_log /opt/nginx/logs/launchpad.apitrary.com_access.log;
+    error_log /opt/nginx/logs/launchpad.apitrary.com_error.log;
+
+    root /home/rails/launchpad/current/public;
+
+    passenger_enabled on;
+    rails_env production;
+
+    location ~* \.(jpg|gif|png|css|js)$ {
+        if (-f $request_filename) {
+            expires    max;
+            break;
+        }
+    }
+}

@@ -1,0 +1,28 @@
+upstream apitray_old_live {
+    server web1.live.apitrary.com:5000 weight=1 max_fails=1;
+    server web1.live.apitrary.com:5001 weight=1 max_fails=1;
+    server web2.live.apitrary.com:5000 weight=1 max_fails=1;
+    server web2.live.apitrary.com:5001 weight=1 max_fails=1;
+}
+
+server {
+    listen <%= @port %>;
+    server_name www.<%= @hostname %>;
+    rewrite ^/(.*) http://<%= @hostname %>/$1 permanent;
+}
+
+server {
+    listen <%= @port %>;
+    server_name <%= @hostname %>;
+
+    access_log /opt/nginx/logs/apitrary.com_access.log;
+    error_log /opt/nginx/logs/apitrary.com_error.log;
+
+    location / {
+        proxy_set_header  X-Real-IP  $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://apitray_old_live;
+    }
+}
