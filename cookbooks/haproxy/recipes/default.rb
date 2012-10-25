@@ -33,10 +33,21 @@ service "haproxy" do
   action [:enable, :start]
 end
 
+# We need this temporarily before we switch our old LIVE apitrary.com to the new server.
+web_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:railsweb")
+web_acl = 'www'
+if node.chef_environment == 'LIVE'
+  web_acl = 'www2'
+end
+
 template "/etc/haproxy/haproxy.cfg" do
   source "haproxy.cfg.erb"
   owner "root"
   group "root"
   mode 0644
   notifies :restart, "service[haproxy]"
+  variables(
+      :webacl => web_acl,
+      :webnodes => web_nodes
+  )
 end
