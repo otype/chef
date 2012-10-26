@@ -17,7 +17,8 @@ if node.chef_environment == "DEV"
     group "root"
     variables(
         :hostname => node['passenger_nginx']['hostnames']['launchpad']['dev'].strip,
-        :port => node['passenger_nginx']['port']
+        :port => node['passenger_nginx']['port'],
+        :rails_env => 'staging'
     )
   end
   elsif node.chef_environment == "LIVE"
@@ -28,7 +29,8 @@ if node.chef_environment == "DEV"
     group "root"
     variables(
         :hostname => node['passenger_nginx']['hostnames']['launchpad']['live'].strip,
-        :port => node['passenger_nginx']['port']
+        :port => node['passenger_nginx']['port'],
+        :rails_env => 'production'
     )
   end
 end

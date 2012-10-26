@@ -8,7 +8,7 @@ server {
     root /home/rails/launchpad/current/public;
 
     passenger_enabled on;
-    rails_env production;
+    rails_env <%= @rails_env %>;
 
     location ~* \.(jpg|gif|png|css|js)$ {
         if (-f $request_filename) {
