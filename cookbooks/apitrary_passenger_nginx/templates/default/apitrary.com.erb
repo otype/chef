@@ -1,12 +1,13 @@
 server {
-    listen 8080;
-    server_name www.dev.apitrary.com;
+    listen <%= @port %>;
+    server_name <%= @hostname %>;
 
     access_log /opt/nginx/logs/www.apitrary.com_access.log;
     error_log /opt/nginx/logs/www.apitrary.com_error.log;
 
     root /home/rails/www/current/public;
 
+    # ENV: <%= @nodeenv %>
     passenger_enabled on;
     rails_env <%= @rails_env %>;
 

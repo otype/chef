@@ -18,10 +18,11 @@ if node.chef_environment == "DEV"
     variables(
         :hostname => node['passenger_nginx']['hostnames']['www']['dev'].strip,
         :port => node['passenger_nginx']['port'],
-        :rails_env => 'staging'
+        :rails_env => 'staging',
+        :nodeenv => node.chef_environment
     )
   end
-  elsif node.chef_environment == "LIVE"
+elsif node.chef_environment == "LIVE"
   template "/etc/nginx/sites-available/apitrary.com" do
     source "apitrary.com.erb"
     mode 0644
@@ -30,7 +31,8 @@ if node.chef_environment == "DEV"
     variables(
         :hostname => node['passenger_nginx']['hostnames']['www']['live'].strip,
         :port => node['passenger_nginx']['port'],
-        :rails_env => 'production'
+        :rails_env => 'production',
+        :nodeenv => node.chef_environment
     )
   end
 end
