@@ -39,10 +39,9 @@ end
 
 git "#{node['apitrary_pytools']['deployr']['deployment_dir']}" do
   repository "#{node['apitrary_pytools']['deployr']['repo']}"
-  #revision "master"
-  revision "0.9.6-p5"
-  action :sync
-  #action :export
+  revision "master"
+  #action :sync
+  action :export
   user "deployr"
 end
 
