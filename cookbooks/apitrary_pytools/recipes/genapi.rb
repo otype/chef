@@ -12,4 +12,5 @@ user_account 'genapi' do
   comment   'Genapi User'
   home      '/home/genapi'
   shell     '/usr/sbin/nologin'
+  not_if {File.exists?("/home/genapi")}
 end
