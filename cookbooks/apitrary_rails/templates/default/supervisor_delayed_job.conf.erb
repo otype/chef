@@ -1,0 +1,9 @@
+[program:delayed_job]
+command=/usr/local/bin/bundle exec rake jobs:work
+environment=RAILS_ENV=<%= @rails_env %>
+directory=/home/rails/launchpad/current
+user=rails
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/home/rails/launchpad/shared/log/delayed_job.log
+loglevel=info
