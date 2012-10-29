@@ -40,8 +40,8 @@ end
 git "#{node['apitrary_pytools']['deployr']['deployment_dir']}" do
   repository "#{node['apitrary_pytools']['deployr']['repo']}"
   revision "master"
-  #action :sync
-  action :export
+  action :sync
+  #action :export
   user "deployr"
 end
 
@@ -69,7 +69,7 @@ template "/etc/supervisor.d/deployr.conf" do
   owner "root"
   group "root"
   variables(
-      :deployr_mode => "deploy"
+      :deployr_mode => node['deployr']['deploy_mode']
   )
 end
 

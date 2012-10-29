@@ -6,6 +6,3 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-
-include_recipe "apitrary_pytools::deployr"
-include_recipe "apitrary_pytools::genapi"
