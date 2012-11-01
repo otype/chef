@@ -16,6 +16,7 @@ template "/etc/supervisor.d/delayed_job.conf" do
   variables(
       :rails_env => node.chef_environment == "DEV" ? "staging" : "production"
   )
+  notifies :run, 'execute[restart delayed_job in supervisor]', :immediately
 end
 
 execute "add delayed_job to supervisor" do
@@ -27,4 +28,5 @@ end
 execute "restart delayed_job in supervisor" do
   user "root"
   command "supervisorctl reread && supervisorctl restart delayed_job"
+  action :nothing
 end

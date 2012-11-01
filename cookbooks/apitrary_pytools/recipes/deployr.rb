@@ -71,6 +71,7 @@ template "/etc/supervisor.d/deployr.conf" do
   variables(
       :deployr_mode => node['deployr']['deploy_mode']
   )
+  notifies :run, 'execute[restart deployr in supervisor]', :immediately
 end
 
 execute "add deployr to supervisor" do
@@ -82,4 +83,5 @@ end
 execute "restart deployr in supervisor" do
   user "root"
   command "supervisorctl reread && supervisorctl restart deployr"
+  action :nothing
 end
