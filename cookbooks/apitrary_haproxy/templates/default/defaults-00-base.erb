@@ -1,0 +1,10 @@
+log             global
+mode            http
+option          httplog
+option          dontlognull
+retries         3
+option          redispatch
+maxconn         2000
+contimeout      5000
+clitimeout      50000
+srvtimeout      50000

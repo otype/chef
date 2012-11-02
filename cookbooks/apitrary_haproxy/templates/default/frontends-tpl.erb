@@ -1,0 +1,2 @@
+acl is_<%= @webacl %> hdr_dom(host) -i <%= @webacl %>
+use_backend <%= @webacl %>_cluster if is_<%= @webacl %>

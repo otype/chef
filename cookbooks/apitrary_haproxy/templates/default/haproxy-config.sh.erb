@@ -1,0 +1,25 @@
+#!/bin/bash
+
+HAPROXY_DIR=/etc/haproxy
+HAPROXY_CONFIG_DIR=${HAPROXY_DIR}/configs
+HAPROXY_CONFIG=/etc/haproxy/haproxy.cfg
+
+function backup_config() {
+    if [[ -f $HAPROXY_CONFIG ]]; then
+        mv $HAPROXY_CONFIG ${HAPROXY_CONFIG}.orig
+    fi
+}
+
+function write_global_defaults_listen() {
+    for d in global defaults listen
+    do
+        cat ${HAPROXY_CONFIG_DIR}/${d}.tpl > $HAPROXY_CONFIG
+    done
+}
+
+function write_frontends() {
+    for d in
+}
+
+backup_config
+write_global_defaults_listen
