@@ -13,13 +13,6 @@ haproxy_config_installed = `cat /etc/haproxy/haproxy.cfg | grep "# This file is 
 # We don't run all this if we already have a generated config by haproxy-config.py!
 if haproxy_config_installed.empty?
 
-  # We need this temporarily before we switch our old LIVE apitrary.com to the new server.
-  web_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:railsweb")
-  web_acl = 'www'
-  if node.chef_environment == 'LIVE'
-    web_acl = 'www2'
-  end
-
   template "/usr/local/sbin/haproxy-config.py" do
     source "haproxy-config.py.erb"
     owner "root"
@@ -82,7 +75,10 @@ if haproxy_config_installed.empty?
     owner "root"
     group "root"
     mode 0644
-    variables(:webacl => web_acl)
+    variables(
+        :subdomain => node.chef_environment == 'LIVE' ? 'www2' : 'www',
+        :webacl => "www"
+    )
   end
 
   template "/etc/haproxy/frontends/http_proxy/20-launchpad" do
@@ -90,8 +86,14 @@ if haproxy_config_installed.empty?
     owner "root"
     group "root"
     mode 0644
-    variables(:webacl => "launchpad")
+    variables(
+        :subdomain => "launchpad",
+        :webacl => "launchpad"
+    )
   end
+
+  # We need this temporarily before we switch our old LIVE apitrary.com to the new server.
+  web_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:railsweb")
 
   template "/etc/haproxy/backends/launchpad_cluster/00-base" do
     source "backends-tpl.erb"
@@ -100,6 +102,7 @@ if haproxy_config_installed.empty?
     mode 0644
     variables(
         :webacl => "launchpad",
+        :subdomain => "launchpad",
         :webnodes => web_nodes
     )
   end
@@ -110,7 +113,7 @@ if haproxy_config_installed.empty?
     group "root"
     mode 0644
     variables(
-        :webacl => web_acl,
+        :webacl => "www",
         :webnodes => web_nodes
     )
   end
