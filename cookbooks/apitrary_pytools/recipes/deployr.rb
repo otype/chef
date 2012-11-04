@@ -61,26 +61,44 @@ template "/etc/deployr/deployr.conf" do
   mode 0644
   owner "root"
   group "root"
+  notifies :run, 'execute[supervisor_deployr_add]', :immediately
 end
 
-template "/etc/supervisor.d/deployr.conf" do
-  source "supervisor_deployr.conf.erb"
-  mode 0644
-  owner "root"
-  group "root"
-  variables(
-      :deployr_mode => node['deployr']['deploy_mode']
-  )
-  notifies :run, 'execute[restart deployr in supervisor]', :immediately
+if node['roles'].include?("loadbalancer")
+  template "/etc/supervisor.d/deployr_balance.conf" do
+    source "supervisor_deployr.conf.erb"
+    mode 0644
+    owner "root"
+    group "root"
+    variables(
+        :deployr_mode => node['deployr']['deploy_mode']
+    )
+    notifies :run, 'execute[supervisor_deployr_add]', :immediately
+  end
+  execute "supervisor_deployr_add" do
+    user "root"
+    command "supervisorctl stop deployr_balance ; supervisorctl remove deployr_balance ; supervisorctl reread && supervisorctl add deployr_balance"
+    action :nothing
+  end
+else
+  template "/etc/supervisor.d/deployr_deploy.conf" do
+    source "supervisor_deployr.conf.erb"
+    mode 0644
+    owner "root"
+    group "root"
+    variables(
+        :deployr_mode => node['deployr']['deploy_mode']
+    )
+    notifies :run, 'execute[supervisor_deployr_add]', :immediately
+  end
+  execute "supervisor_deployr_add" do
+    user "root"
+    command "supervisorctl stop deployr_deploy ; supervisorctl remove deployr_deploy ; supervisorctl reread && supervisorctl add deployr_deploy"
+    action :nothing
+  end
 end
 
-execute "add deployr to supervisor" do
-  user "root"
-  command "supervisorctl reread && supervisorctl add deployr"
-  not_if {"supervisorctl status deployr | grep deployr"}
-end
-
-execute "restart deployr in supervisor" do
+execute "supervisor_deployr_restart" do
   user "root"
   command "supervisorctl reread && supervisorctl restart deployr"
   action :nothing
