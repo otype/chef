@@ -9,6 +9,9 @@
 default['apitrary_pytools']['deployr']['repo'] = "git@bitbucket.org:apitrary/deployr.git"
 default['apitrary_pytools']['deployr']['deployment_dir'] = "/home/deployr/deployment"
 
+default['apitrary_pytools']['genapi']['repo'] = "git@bitbucket.org:apitrary/pygenapi.git"
+default['apitrary_pytools']['genapi']['deployment_dir'] = "/home/genapi/deployment"
+
 default['deployr']['dev']['SUPERVISORD_HOST'] = '1.1.1.1'
 default['deployr']['dev']['SUPERVISORD_WEB_PORT'] = 9001
 default['deployr']['dev']['SUPERVISOR_XML_RPC_USERNAME'] = 'NOTSET'

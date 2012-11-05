@@ -37,11 +37,17 @@ template "/home/deployr/.ssh/live-bitbucket-ro.pub" do
   group "deployr"
 end
 
+execute "remove deployment dir" do
+  command "rm -rf #{node['apitrary_pytools']['deployr']['deployment_dir']}"
+  user "root"
+  only_if {File.exists?(node['apitrary_pytools']['deployr']['deployment_dir'])}
+end
+
 git "#{node['apitrary_pytools']['deployr']['deployment_dir']}" do
   repository "#{node['apitrary_pytools']['deployr']['repo']}"
   revision "master"
-  action :sync
-  #action :export
+  #action :sync
+  action :export
   user "deployr"
 end
 
