@@ -8,7 +8,7 @@
 #
 include_recipe "haproxy::default"
 
-haproxy_config_installed = `cat /etc/haproxy/haproxy.cfg | grep "# This file is generated. All changes are overwritten"`
+haproxy_config_installed = `cat /etc/haproxy/haproxy.cfg | grep "# REMOVE THIS LINE HERE, THEN RESTART chef-client"`
 
 directory "/var/chroot/haproxy" do
   mode "0755"

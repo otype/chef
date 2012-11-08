@@ -85,6 +85,7 @@ def create_config(config_dir, output_file):
     output.write("# Configuration file for HAProxy\n")
     output.write("#\n")
     output.write("# This file is generated. All changes are overwritten!\n")
+    output.write("# REMOVE THIS LINE HERE, THEN RESTART chef-client.\n")
     output.write("# Generated on %s\n" % time.ctime(time.time()) )
     
     simple_types = ["global", "defaults"]
