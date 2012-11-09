@@ -7,6 +7,7 @@
 # All rights reserved - Do Not Redistribute
 #
 include_recipe "user::default"
+include_recipe "supervisor"
 
 user_account 'genapi' do
   comment   'Genapi User'
