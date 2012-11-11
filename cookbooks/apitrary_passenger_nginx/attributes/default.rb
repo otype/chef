@@ -10,7 +10,7 @@ default['passenger_nginx']['passenger_version'] = "3.0.17"
 default['passenger_nginx']['prefix'] = "/opt/nginx"
 default['passenger_nginx']['worker_processes'] = "4"
 default['passenger_nginx']['binary'] = "/opt/nginx/sbin/nginx"
-default['passenger_nginx']['pid'] = "/var/run/nginx.pid"
+default['passenger_nginx']['pid'] = "/opt/nginx/logs/nginx.pid"
 default['passenger_nginx']['port'] = 8080
 
 # Hostnames
