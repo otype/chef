@@ -7,10 +7,15 @@
 # All rights reserved - Do Not Redistribute
 #
 
-package_uri = "http://s3.amazonaws.com/downloads.basho.com/riak/1.2/1.2.1/debian/6/riak_1.2.1-1_amd64.deb"
+#package_uri = "http://s3.amazonaws.com/downloads.basho.com/riak/1.2/1.2.1/debian/6/riak_1.2.1-1_amd64.deb"
+#package_checksum = "b45550e3b2f6aab64c248abc008c27ba769351098d451c9637fd0f7fbb150f72"
+#package_version = "1.2.1-1"
+
+package_uri = "http://s3.amazonaws.com/downloads.basho.com/riak/1.1/1.1.4/riak_1.1.4-1_amd64.deb"
+package_checksum = "da385c1686e16f1d2b08aa93006e9ddce5dfda18e37d7774e9cc07345264f55e"
+package_version = "1.1.4"
+
 package_file = package_uri.split("/").last
-package_checksum = "b45550e3b2f6aab64c248abc008c27ba769351098d451c9637fd0f7fbb150f72"
-package_version = "1.2.1-1"
 
 group "riak"
 
