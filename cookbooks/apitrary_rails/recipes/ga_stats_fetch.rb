@@ -9,7 +9,7 @@
 
 rails_env = node.chef_environment == "DEV" ? "staging" : "production"
 cron "ga_stats_fetch" do
-  hour "6,18"
+  hour "*/6"
   minute "15"
-  command "cd /home/rails/launchpad/current && RAILS_ENV=#{rails_env} rake stats:fetch"
+  command "cd /home/rails/launchpad/current && RAILS_ENV=#{rails_env} rake stats:fetch && echo `date` > /root/last_cron_run.ga_stats_fetch"
 end
