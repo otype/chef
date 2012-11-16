@@ -2,6 +2,9 @@
 # Cookbook Name:: apitrary_firewall
 # Recipe:: slicehost_defaults
 #
+# A set of rules has been taken from following tutorial:
+# http://www.techrepublic.com/blog/10things/10-iptables-rules-to-help-secure-your-linux-box/539
+#
 # Copyright 2012, apitrary
 #
 # All rights reserved - Do Not Redistribute
@@ -17,6 +20,12 @@ end
 # Reject packets other than those explicitly allowed
 simple_iptables_policy "FORWARD" do
   policy "DROP"
+end
+
+# Port-scan rules
+simple_iptables_rule "system" do
+  rule "-p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j RETURN"
+  jump false
 end
 
 # Log
