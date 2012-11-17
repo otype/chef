@@ -31,18 +31,17 @@ riak_nodes.each do |riak_node|
   end
 end
 
-simple_iptables_rule "system" do
-  rule [
-           "-p tcp --dport 8091",
-           "-p tcp --dport 8098"
-       ]
-  jump "ACCEPT"
-end
+loadbalancer_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:loadbalancer")
 
-simple_iptables_rule "system" do
-  rule [
-           "-p tcp --dport 8081",
-           "-p tcp --dport 8087"
-       ]
-  jump "ACCEPT"
+# Allow connections from loadbalancer to app server
+loadbalancer_nodes.each do |lb_node|
+  simple_iptables_rule "system" do
+    rule [
+             "-p tcp -s #{lb_node['ipaddress']} --dport 8091",
+             "-p tcp -s #{lb_node['ipaddress']} --dport 8098",
+             "-p tcp -s #{lb_node['ipaddress']} --dport 8081",
+             "-p tcp -s #{lb_node['ipaddress']} --dport 8087",
+    ]
+    jump "ACCEPT"
+  end
 end
