@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: apitrary_pytools
-# Recipe:: default
+# Recipe:: genapi
 #
 # Copyright 2012, apitrary
 #

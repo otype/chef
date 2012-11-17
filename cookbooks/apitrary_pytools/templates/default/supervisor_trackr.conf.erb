@@ -1,0 +1,8 @@
+[program:trackr]
+command=/usr/bin/python /usr/bin/trackr.py
+directory=/home/trackr
+user=root
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/var/log/trackr.log
+loglevel=info
