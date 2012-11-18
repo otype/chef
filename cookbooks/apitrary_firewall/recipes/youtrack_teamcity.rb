@@ -11,6 +11,9 @@ include_recipe "simple_iptables"
 
 # Allow youtrack
 simple_iptables_rule "system" do
-  rule "-p tcp --dport 8000"
+  rule [
+           "-p tcp --dport 8000",   # youtrack
+           "-p tcp --dport 8111"    # teamcity
+  ]
   jump "ACCEPT"
 end

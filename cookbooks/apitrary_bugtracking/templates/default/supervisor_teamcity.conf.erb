@@ -1,0 +1,10 @@
+[program:teamcity]
+command=/usr/bin/java -Xmx512m -Djava.awt.headless=true -jar /home/bugs/teamcity/teamcity-7.1.jar 9000
+directory=/home/bugs
+user=bugs
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/var/log/teamcity.log
+loglevel=info
+startsecs=10
+stopsignal=KILL
