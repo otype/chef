@@ -11,7 +11,7 @@ include_recipe "apt"
 include_recipe "build-essential"
 include_recipe "carlo-chef-ruby1.9::default"
 
-%w( libcurl4-openssl-dev libxslt).each do |pkg|
+%w( libcurl4-openssl-dev libxslt-dev).each do |pkg|
   package pkg do
     action :install
   end
