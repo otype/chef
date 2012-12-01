@@ -37,6 +37,20 @@ template "/home/genapi/.ssh/live-bitbucket-ro.pub" do
   group "genapi"
 end
 
+template "/home/genapi/.ssh/apitrary-staging-deploy" do
+  source "apitrary-staging-deploy.erb"
+  mode 0600
+  owner "genapi"
+  group "genapi"
+end
+
+template "/home/genapi/.ssh/apitrary-staging-deploy.pub" do
+  source "apitrary-staging-deploy.pub.erb"
+  mode 0644
+  owner "genapi"
+  group "genapi"
+end
+
 execute "remove deployment dir" do
   command "rm -rf #{node['apitrary_pytools']['genapi']['deployment_dir']}"
   user "root"
