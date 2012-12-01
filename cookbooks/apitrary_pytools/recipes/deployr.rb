@@ -26,29 +26,29 @@ end
 template "/home/deployr/.ssh/live-bitbucket-ro" do
   source "live-bitbucket-ro.erb"
   mode 0600
-  owner "genapi"
-  group "genapi"
+  owner "deployr"
+  group "deployr"
 end
 
 template "/home/deployr/.ssh/live-bitbucket-ro.pub" do
   source "live-bitbucket-ro.pub.erb"
   mode 0644
-  owner "genapi"
-  group "genapi"
+  owner "deployr"
+  group "deployr"
 end
 
 template "/home/deployr/.ssh/apitrary-staging-deploy" do
   source "apitrary-staging-deploy.erb"
   mode 0600
-  owner "genapi"
-  group "genapi"
+  owner "deployr"
+  group "deployr"
 end
 
 template "/home/deployr/.ssh/apitrary-staging-deploy.pub" do
   source "apitrary-staging-deploy.pub.erb"
   mode 0644
-  owner "genapi"
-  group "genapi"
+  owner "deployr"
+  group "deployr"
 end
 
 execute "remove deployment dir" do
