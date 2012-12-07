@@ -6,3 +6,38 @@
 #
 # All rights reserved - Do Not Redistribute
 #
+
+template "/root/.ssh/config" do
+  source "ssh_config.erb"
+  mode 0644
+  owner "root"
+  group "root"
+end
+
+template "/root/.ssh/live-bitbucket-ro" do
+  source "live-bitbucket-ro.erb"
+  mode 0600
+  owner "root"
+  group "root"
+end
+
+template "/root/.ssh/live-bitbucket-ro.pub" do
+  source "live-bitbucket-ro.pub.erb"
+  mode 0644
+  owner "root"
+  group "root"
+end
+
+template "/root/.ssh/apitrary-staging-deploy" do
+  source "apitrary-staging-deploy.erb"
+  mode 0600
+  owner "root"
+  group "root"
+end
+
+template "/root/.ssh/apitrary-staging-deploy.pub" do
+  source "apitrary-staging-deploy.pub.erb"
+  mode 0644
+  owner "root"
+  group "root"
+end

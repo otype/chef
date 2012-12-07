@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of apitrary_pytools.
 
+## 0.1.1:
+
+* Works now with github and pip install directly from github
+
 ## 0.1.0:
 
 * Initial release of apitrary_pytools

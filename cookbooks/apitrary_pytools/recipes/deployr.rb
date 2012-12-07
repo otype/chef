@@ -16,58 +16,68 @@ user_account 'deployr' do
   not_if {File.exists?("/home/deployr")}
 end
 
-template "/home/deployr/.ssh/config" do
-  source "deployr_ssh_config.erb"
-  mode 0644
-  owner "deployr"
-  group "deployr"
-end
+#template "/home/deployr/.ssh/config" do
+#  source "ssh_config.erb"
+#  mode 0644
+#  owner "deployr"
+#  group "deployr"
+#end
+#
+#template "/home/deployr/.ssh/live-bitbucket-ro" do
+#  source "live-bitbucket-ro.erb"
+#  mode 0600
+#  owner "deployr"
+#  group "deployr"
+#end
+#
+#template "/home/deployr/.ssh/live-bitbucket-ro.pub" do
+#  source "live-bitbucket-ro.pub.erb"
+#  mode 0644
+#  owner "deployr"
+#  group "deployr"
+#end
+#
+#template "/home/deployr/.ssh/apitrary-staging-deploy" do
+#  source "apitrary-staging-deploy.erb"
+#  mode 0600
+#  owner "deployr"
+#  group "deployr"
+#end
+#
+#template "/home/deployr/.ssh/apitrary-staging-deploy.pub" do
+#  source "apitrary-staging-deploy.pub.erb"
+#  mode 0644
+#  owner "deployr"
+#  group "deployr"
+#end
+#
+#execute "remove deployment dir" do
+#  command "rm -rf #{node['apitrary_pytools']['deployr']['deployment_dir']}"
+#  user "root"
+#  only_if {File.exists?(node['apitrary_pytools']['deployr']['deployment_dir'])}
+#end
+#
+#git "#{node['apitrary_pytools']['deployr']['deployment_dir']}" do
+#  repository "#{node['apitrary_pytools']['deployr']['repo']}"
+#  revision "master"
+#  #action :sync
+#  action :export
+#  user "deployr"
+#end
+#
+#execute "pip_install" do
+#  user "root"
+#  command "cd #{node['apitrary_pytools']['deployr']['deployment_dir']} && python setup.py install"
+#end
 
-template "/home/deployr/.ssh/live-bitbucket-ro" do
-  source "live-bitbucket-ro.erb"
-  mode 0600
-  owner "deployr"
-  group "deployr"
-end
-
-template "/home/deployr/.ssh/live-bitbucket-ro.pub" do
-  source "live-bitbucket-ro.pub.erb"
-  mode 0644
-  owner "deployr"
-  group "deployr"
-end
-
-template "/home/deployr/.ssh/apitrary-staging-deploy" do
-  source "apitrary-staging-deploy.erb"
-  mode 0600
-  owner "deployr"
-  group "deployr"
-end
-
-template "/home/deployr/.ssh/apitrary-staging-deploy.pub" do
-  source "apitrary-staging-deploy.pub.erb"
-  mode 0644
-  owner "deployr"
-  group "deployr"
-end
-
-execute "remove deployment dir" do
-  command "rm -rf #{node['apitrary_pytools']['deployr']['deployment_dir']}"
+execute "pip-install-genapi" do
+  #command "pip install --upgrade git+ssh://git@github.com/apitrary/pygenapi.git@#{node[:tagname]}"
+  command "pip install --upgrade git+ssh://git@github.com/apitrary/deployr.git"
   user "root"
-  only_if {File.exists?(node['apitrary_pytools']['deployr']['deployment_dir'])}
-end
-
-git "#{node['apitrary_pytools']['deployr']['deployment_dir']}" do
-  repository "#{node['apitrary_pytools']['deployr']['repo']}"
-  revision "master"
-  #action :sync
-  action :export
-  user "deployr"
-end
-
-execute "pip_install" do
-  user "root"
-  command "cd #{node['apitrary_pytools']['deployr']['deployment_dir']} && python setup.py install"
+  #action :nothing
+  #unless node.has_key?("nctest")
+  #  notifies :run, "execute[nodecontroller-add]", :immediately
+  #end
 end
 
 directory "/etc/deployr" do
