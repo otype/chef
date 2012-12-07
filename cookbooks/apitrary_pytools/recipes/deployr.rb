@@ -70,7 +70,7 @@ end
 #  command "cd #{node['apitrary_pytools']['deployr']['deployment_dir']} && python setup.py install"
 #end
 
-execute "pip-install-genapi" do
+execute "pip-install-deployr" do
   #command "pip install --upgrade git+ssh://git@github.com/apitrary/pygenapi.git@#{node[:tagname]}"
   command "pip install --upgrade git+ssh://git@github.com/apitrary/deployr.git"
   user "root"
