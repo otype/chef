@@ -7,6 +7,13 @@
 # All rights reserved - Do Not Redistribute
 #
 
+directory "/root/.ssh" do
+  owner "root"
+  mode 0755
+  action :create
+  not_if {File.exists?("/root/.ssh")}
+end
+
 template "/root/.ssh/config" do
   source "ssh_config.erb"
   mode 0644
