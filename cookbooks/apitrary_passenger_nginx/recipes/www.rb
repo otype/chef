@@ -29,6 +29,7 @@ elsif node.chef_environment == "LIVE"
     owner "root"
     group "root"
     variables(
+        :hostname_long => node['passenger_nginx']['hostnames']['www']['live_long'].strip,
         :hostname => node['passenger_nginx']['hostnames']['www']['live'].strip,
         :port => node['passenger_nginx']['port'],
         :rails_env => 'production',
