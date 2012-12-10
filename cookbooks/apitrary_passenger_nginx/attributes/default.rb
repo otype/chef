@@ -17,6 +17,7 @@ default['passenger_nginx']['port'] = 8080
 default['passenger_nginx']['hostnames']['launchpad']['dev'] = "launchpad.dev.apitrary.com"
 default['passenger_nginx']['hostnames']['launchpad']['live'] = "launchpad.apitrary.com"
 default['passenger_nginx']['hostnames']['www']['dev'] = "www.dev.apitrary.com"
+default['passenger_nginx']['hostnames']['www']['live_long_old'] = "www2.apitrary.com"
 default['passenger_nginx']['hostnames']['www']['live_long'] = "www.apitrary.com"
 default['passenger_nginx']['hostnames']['www']['live'] = "apitrary.com"
 
