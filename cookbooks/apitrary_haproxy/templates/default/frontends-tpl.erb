@@ -1,2 +1,6 @@
-acl is_<%= @webacl %> hdr_dom(host) -i <%= @subdomain %>
-use_backend <%= @webacl %>_cluster if is_<%= @webacl %>
+acl is_www_clear hdr_beg(host) -i apitrary
+use_backend www_cluster if is_www_clear
+acl is_www2 hdr_dom(host) -i www2
+use_backend www_cluster if is_www2
+acl is_www hdr_dom(host) -i www
+use_backend www_cluster if is_www

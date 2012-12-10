@@ -84,10 +84,6 @@ if haproxy_config_installed.empty?
     owner "root"
     group "root"
     mode 0644
-    variables(
-        :subdomain => node.chef_environment == 'LIVE' ? 'www2' : 'www',
-        :webacl => "www"
-    )
   end
 
   template "/etc/haproxy/frontends/http_proxy/20-launchpad" do
