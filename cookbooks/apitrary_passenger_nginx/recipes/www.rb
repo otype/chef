@@ -44,9 +44,9 @@ template "/etc/thin/www.yml" do
   owner "root"
   group "root"
   variables(
-    :rails_env => rails_env,
-    :thin_servers => servers,
-    :name => "www"
+      :rails_env => rails_env,
+      :thin_servers => servers,
+      :name => "www"
   )
 end
 
