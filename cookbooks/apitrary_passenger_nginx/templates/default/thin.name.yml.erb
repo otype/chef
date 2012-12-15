@@ -6,5 +6,5 @@ wait: 30
 environment: <%= @rails_env %>
 servers: <%= @thin_servers %>
 daemonize: true
-socket: /var/run/thin.<%= @name %>.sock
+socket: /tmp/thin.<%= @name %>.sock
 tag: thin-<%= @name %>
