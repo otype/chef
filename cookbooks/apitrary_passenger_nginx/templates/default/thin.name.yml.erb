@@ -1,0 +1,10 @@
+---
+user: www-data
+group: www-data
+timeout: 30
+wait: 30
+environment: <%= @rails_env %>
+servers: <%= @thin_servers %>
+daemonize: true
+socket: /var/run/thin.<%= @name %>.sock
+tag: thin-<%= @name %>

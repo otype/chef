@@ -9,37 +9,48 @@
 
 include_recipe "apitrary_passenger_nginx::default"
 
-if node.chef_environment == "DEV"
-  template "/etc/nginx/sites-available/apitrary.com" do
-    source "apitrary.com.erb"
+rails_env = 'staging'
+node_env = 'dev'
+servers = 2
+if node.chef_environment == "LIVE"
+  rails_env = 'production'
+  node_env = 'live'
+  servers = 4
+end
+
+%w(apitrary.com apitrary.com.thin.sock).each do |host|
+  template "/etc/nginx/sites-available/#{host}" do
+    source "#{host}.erb"
     mode 0644
     owner "root"
     group "root"
     variables(
-        :hostname => node['passenger_nginx']['hostnames']['www']['dev'].strip,
+        :hostname => node['passenger_nginx']['hostnames']['www'][node_env].strip,
         :port => node['passenger_nginx']['port'],
-        :rails_env => 'staging',
-        :nodeenv => node.chef_environment
-    )
-  end
-elsif node.chef_environment == "LIVE"
-  template "/etc/nginx/sites-available/apitrary.com" do
-    source "apitrary.com.erb"
-    mode 0644
-    owner "root"
-    group "root"
-    variables(
-        :hostname_long_old => node['passenger_nginx']['hostnames']['www']['live_long_old'].strip,
-        :hostname_long => node['passenger_nginx']['hostnames']['www']['live_long'].strip,
-        :hostname => node['passenger_nginx']['hostnames']['www']['live'].strip,
-        :port => node['passenger_nginx']['port'],
-        :rails_env => 'production',
-        :nodeenv => node.chef_environment
+        :rails_env => rails_env
     )
   end
 end
 
+directory "/etc/thin" do
+  mode 0755
+  owner "root"
+  group "root"
+end
+
+template "/etc/thin/www.yml" do
+  source "thin.name.yml.erb"
+  mode 0644
+  owner "root"
+  group "root"
+  variables(
+    :rails_env => rails_env,
+    :thin_servers => servers,
+    :name => "www"
+  )
+end
+
 execute "activate_apitrary.com" do
   user "root"
-  command "ln -nsf /etc/nginx/sites-available/apitrary.com /etc/nginx/sites-enabled/apitrary.com"
+  command "ln -nsf /etc/nginx/sites-available/apitrary.com.thin.sock /etc/nginx/sites-enabled/apitrary.com.thin.sock"
 end

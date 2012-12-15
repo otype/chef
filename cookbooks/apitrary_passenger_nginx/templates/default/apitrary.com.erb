@@ -1,11 +1,5 @@
 server {
     listen <%= @port %>;
-    server_name <%= @hostname_long_old %>;
-    rewrite ^/(.*) http://<%= @hostname %>/$1 permanent;
-}
-
-server {
-    listen <%= @port %>;
     server_name <%= @hostname_long %>;
     rewrite ^/(.*) http://<%= @hostname %>/$1 permanent;
 }
@@ -19,7 +13,7 @@ server {
 
     root /home/rails/www/current/public;
 
-    # ENV: <%= @nodeenv %>
+    # ENV: <%= node.chef_environment %>
     passenger_enabled on;
     rails_env <%= @rails_env %>;
 
