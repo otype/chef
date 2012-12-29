@@ -11,7 +11,7 @@ include_recipe "apitrary_passenger_nginx::default"
 
 rails_env = 'staging'
 node_env = 'dev'
-servers = 2
+servers = 1
 if node.chef_environment == "LIVE"
   rails_env = 'production'
   node_env = 'live'
