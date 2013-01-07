@@ -45,6 +45,6 @@ end
 
 # Allow RabbitMQ management console from public
 simple_iptables_rule "system" do
-  rule "-p tcp --dport 55672"
+  rule "-p tcp --dport 15672"
   jump "ACCEPT"
 end
