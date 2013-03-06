@@ -12,7 +12,7 @@ COMPANY_NAME = "apitrary"
 SSL_COUNTRY_NAME = "DE"
 
 # The State Name to use for SSL Certificates
-SSL_STATE_NAME = "Several"
+SSL_STATE_NAME = "Berlin"
 
 # The Locality Name for SSL - typically, the city
 SSL_LOCALITY_NAME = "Berlin"
