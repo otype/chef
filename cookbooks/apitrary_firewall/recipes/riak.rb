@@ -9,6 +9,12 @@
 
 include_recipe "simple_iptables"
 
+%w( libssl0.9.8 ).each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
 # Get all app server nodes IPs
 app_server_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:appserver")
 
