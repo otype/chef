@@ -1,50 +1,38 @@
 global
-        log 127.0.0.1   local0
-        log 127.0.0.1   local1 notice
-        #log loghost    local0 info
-        maxconn 4096
-        #debug
-        #quiet
-        user haproxy
-        group haproxy
+  log 127.0.0.1   local0
+  log 127.0.0.1   local1 notice
+  #log loghost    local0 info
+  maxconn 4096
+  #debug
+  #quiet
+  user haproxy
+  group haproxy
 
 defaults
-        log     global
-        mode    http
-        option  httplog
-        option  dontlognull
-        retries 3
-        option redispatch
-        maxconn 2000
-        contimeout      5000
-        clitimeout      50000
-        srvtimeout      50000
-        
-# Set up application listeners here.
-#listen application 0.0.0.0:<%= node["haproxy"]["incoming_port"] %>
-#  balance  <%= node["haproxy"]["balance_algorithm"] %>
-#  server localhost 127.0.0.1:4000 weight 1 maxconn <%= node["haproxy"]["member_max_connections"] %> check
-#  server localhost 127.0.0.1:4001 weight 1 maxconn <%= node["haproxy"]["member_max_connections"] %> check
+  log     global
+  mode    http
+  option  httplog
+  option  dontlognull
+  retries 3
+  option redispatch
+  timeout connect 5s
+  timeout client 50s
+  timeout server 50s
+  balance  <%= node['haproxy']['balance_algorithm'] %>
 
-<% if node["haproxy"]["enable_admin"] -%>
-listen admin 0.0.0.0:22002
+# Set up application listeners here.
+
+frontend http
+  maxconn 4000
+  bind 0.0.0.0:<%= node['haproxy']['incoming_port'] %>
+  default_backend servers-http
+
+backend servers-http
+  server localhost 127.0.0.1:4000 weight 1 maxconn <%= node['haproxy']['member_max_connections'] %> check
+  server localhost 127.0.0.1:4001 weight 1 maxconn <%= node['haproxy']['member_max_connections'] %> check
+
+<% if node['haproxy']['enable_admin'] -%>
+listen admin <%= node['haproxy']['admin']['address_bind'] %>:<%= node['haproxy']['admin']['port'] %>
   mode http
   stats uri /
 <% end -%>
-
-frontend http_proxy
-    bind 0.0.0.0:80
-    acl is_launchpad hdr_dom(host) -i launchpad
-    acl is_<%= @webacl %> hdr_dom(host) -i <%= @webacl %>
-    use_backend launchpad_cluster if is_launchpad
-    use_backend <%= @webacl %>_cluster if is_<%= @webacl %>
-
-backend launchpad_cluster
-    <% @webnodes.each do |webnode| %>
-    server server-launchpad <%= webnode[:ipaddress] %>:8080
-    <% end %>
-
-backend <%= @webacl %>_cluster
-    <% @webnodes.each do |webnode| %>
-    server server-<%= @webacl %> <%= webnode[:ipaddress] %>:8080
-    <% end %>
