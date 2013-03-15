@@ -2,7 +2,7 @@
 # Cookbook Name:: redisio
 # Provider::install
 #
-# Copyright 2012, Brian Bianco <brian.bianco@gmail.com>
+# Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -69,10 +69,26 @@ def configure
     #Merge the configuration defaults with the provided array of configurations provided
     current = current_defaults_hash.merge(current_instance_hash)
 
+    #Merge in the default maxmemory
+    node_memory_kb = node["memory"]["total"]
+    node_memory_kb.slice! "kB"
+    node_memory_kb = node_memory_kb.to_i
+
+    maxmemory = current['maxmemory']
+    if current['maxmemory'] && current['maxmemory'].include?("%")
+      # Just assume this is sensible like "95%" or "95 %"
+      percent_factor = current['maxmemory'].to_f / 100.0
+      # Ohai reports memory in KB as it looks in /proc/meminfo
+      maxmemory = (node_memory_kb * 1024 * percent_factor / new_resource.servers.length).to_i
+    end
+
+    descriptors = current['ulimit'] == 0 ? current['maxclients'] + 32 : current['maxclients']
+
     recipe_eval do
-      piddir = "#{base_piddir}/#{current['port']}"
-      aof_file = "#{current['datadir']}/appendonly-#{current['port']}.aof"
-      rdb_file = "#{current['datadir']}/dump-#{current['port']}.rdb"  
+      server_name = current['name'] || current['port']
+      piddir = "#{base_piddir}/#{server_name}"
+      aof_file = "#{current['datadir']}/appendonly-#{server_name}.aof"
+      rdb_file = "#{current['datadir']}/dump-#{server_name}.rdb"  
 
       #Create the owner of the redis data directory
       user current['user'] do
@@ -80,6 +96,7 @@ def configure
         supports :manage_home => true
         home current['homedir']
         shell current['shell']
+        system current['systemuser']
       end
       #Create the redis configuration directory
       directory current['configdir'] do
@@ -138,20 +155,31 @@ def configure
         only_if { current['backuptype'] == 'rdb' || current['backuptype'] == 'both' }
         only_if { ::File.exists?(rdb_file) }
       end
+      #Setup the redis users descriptor limits
+      if current['ulimit']
+        user_ulimit current['user'] do
+          filehandle_limit descriptors
+        end
+      end
       #Lay down the configuration files for the current instance
-      template "#{current['configdir']}/#{current['port']}.conf" do
+      template "#{current['configdir']}/#{server_name}.conf" do
         source 'redis.conf.erb'
+        cookbook 'redisio'
         owner current['user']
         group current['group']
         mode '0644'
         variables({
           :version                => version_hash,
           :piddir                 => piddir,
+          :name                   => server_name,
+          :job_control            => current['job_control'],
           :port                   => current['port'],
           :address                => current['address'],
           :databases              => current['databases'],
           :backuptype             => current['backuptype'],
           :datadir                => current['datadir'],
+          :unixsocket             => current['unixsocket'],
+          :unixsocketperm         => current['unixsocketperm'],
           :timeout                => current['timeout'],
           :loglevel               => current['loglevel'],
           :logfile                => current['logfile'],
@@ -165,7 +193,7 @@ def configure
           :repltimeout            => current['repltimeout'],
           :requirepass            => current['requirepass'],
           :maxclients             => current['maxclients'],
-          :maxmemory              => current['maxmemory'],
+          :maxmemory              => maxmemory,
           :maxmemorypolicy        => current['maxmemorypolicy'],
           :maxmemorysamples       => current['maxmemorysamples'],
           :appendfsync            => current['appendfsync'],
@@ -176,35 +204,68 @@ def configure
         })
       end
       #Setup init.d file
-      template "/etc/init.d/redis#{current['port']}" do
+      template "/etc/init.d/redis#{server_name}" do
         source 'redis.init.erb'
+        cookbook 'redisio'
         owner 'root'
         group 'root'
         mode '0755'
         variables({
+          :name => server_name,
+          :job_control => current['job_control'],
           :port => current['port'],
+          :address => current['address'],
           :user => current['user'],
           :configdir => current['configdir'],
           :piddir => piddir,
           :requirepass => current['requirepass'],
-          :platform => node['platform']
+          :shutdown_save => current['shutdown_save'],
+          :platform => node['platform'],
+          :unixsocket => current['unixsocket']
           })
+        only_if { current['job_control'] == 'initd' }
+      end
+      template "/etc/init/redis#{server_name}.conf" do
+        source 'redis.upstart.conf.erb'
+        cookbook 'redisio'
+        owner current['user']
+        group current['group']
+        mode '0644'
+        variables({
+          :name => server_name,
+          :job_control => current['job_control'],
+          :port => current['port'],
+          :address => current['address'],
+          :user => current['user'],
+          :group => current['group'],
+          :maxclients => current['maxclients'],
+          :requirepass => current['requirepass'],
+          :shutdown_save => current['shutdown_save'],
+          :save => current['save'],
+          :configdir => current['configdir'],
+          :piddir => piddir,
+          :platform => node['platform'],
+          :unixsocket => current['unixsocket']
+        })
+        only_if { current['job_control'] == 'upstart' }
       end
     end
   end # servers each loop
 end
 
 def redis_exists?
-  exists = Chef::ShellOut.new("which redis-server")
+  exists = Mixlib::ShellOut.new("which redis-server")
   exists.run_command
   exists.exitstatus == 0 ? true : false 
 end
 
 def version
   if redis_exists?
-    redis_version = Chef::ShellOut.new("redis-server -v | cut -d ' ' -f 4")
+    redis_version = Mixlib::ShellOut.new("redis-server -v")
     redis_version.run_command
-    return redis_version.stdout.gsub("\n",'')
+    version = redis_version.stdout[/version (\d*.\d*.\d*)/,1] || redis_version.stdout[/v=(\d*.\d*.\d*)/,1]
+    Chef::Log.info("The Redis server version is: #{version}")
+    return version.gsub("\n",'')
   end
   nil
 end

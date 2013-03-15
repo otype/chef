@@ -2,42 +2,49 @@
 # Cookbook Name:: iptables
 # Recipe:: default
 #
-# Copyright 2012, YOUR_COMPANY_NAME
+# Copyright 2008-2009, Opscode, Inc.
 #
-# All rights reserved - Do Not Redistribute
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-package "iptables"
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
-template "/etc/iptables.test.rules" do
-  source "iptables.test.rules.erb"
-  owner "root"
-  group "root"
-  variables :nodes => search(:node, "*:*")
-end
+package "iptables" 
+package "perl"
 
-execute "iptables-restore" do
-  command "iptables-restore < /etc/iptables.test.rules"
-  user "root"
-  group "root"
-  action :run
-  notifies :run, "execute[iptables-save]", :immediately
-end
-
-execute "iptables-save" do
-  command "iptables-save > /etc/iptables.up.rules"
-  user "root"
-  group "root"
+execute "rebuild-iptables" do
+  command "/usr/sbin/rebuild-iptables"
   action :nothing
 end
 
-execute "network-interfaces" do
-  command "echo 'pre-up iptables-restore < /etc/iptables.up.rules' >> /etc/network/interfaces"
-  user "root"
-  group "root"
-  action :run
-  only_if do
-    lines = `cat /etc/network/interfaces | grep iptables-restore`
-    Chef::Log.info "Lines found? -> #{lines.empty?}"
-    lines.empty?
+directory "/etc/iptables.d" do
+  action :create
+end
+
+cookbook_file "/usr/sbin/rebuild-iptables" do
+  source "rebuild-iptables"
+  mode 0755
+end
+
+case node[:platform]
+when "ubuntu", "debian"
+  iptables_save_file = "/etc/iptables/general"
+
+  template "/etc/network/if-pre-up.d/iptables_load" do
+    source "iptables_load.erb"
+    mode 0755
+    variables :iptables_save_file => iptables_save_file
   end
 end
+
+
+iptables_rule "all_established"
+iptables_rule "all_icmp"

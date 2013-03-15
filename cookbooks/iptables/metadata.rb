@@ -1,6 +1,11 @@
-maintainer       "apitrary"
-maintainer_email "hgs@apitrary.com"
-license          "All rights reserved"
-description      "Installs/Configures iptables"
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.0.1"
+name              "iptables"
+maintainer        "Opscode, Inc."
+maintainer_email  "cookbooks@opscode.com"
+license           "Apache 2.0"
+description       "Sets up iptables to use a script to maintain rules"
+version           "0.12.0"
+
+recipe "iptables", "Installs iptables and sets up .d style config directory of iptables rules"
+%w{ redhat centos debian ubuntu}.each do |os|
+  supports os
+end
