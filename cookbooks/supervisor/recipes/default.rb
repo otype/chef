@@ -35,6 +35,14 @@ template "/etc/supervisord.conf" do
   owner "root"
   group "root"
   mode "644"
+  variables({
+    :inet_port => node['supervisor']['inet_port'],
+    :inet_username => node['supervisor']['inet_username'],
+    :inet_password => node['supervisor']['inet_password'],
+    :supervisord_minfds => node['supervisor']['minfds'],
+    :supervisord_minprocs => node['supervisor']['minprocs'],
+    :supervisor_version => node['supervisor']['version'],
+  })
 end
 
 directory node['supervisor']['log_dir'] do
