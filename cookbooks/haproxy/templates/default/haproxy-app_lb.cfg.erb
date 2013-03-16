@@ -1,0 +1,62 @@
+global
+  log 127.0.0.1   local0
+  log 127.0.0.1   local1 notice
+  #log loghost    local0 info
+  maxconn <%= node['cookbooks.haproxy']['global_max_connections'] %>
+  #debug
+  #quiet
+  user <%= node['cookbooks.haproxy']['user'] %>
+  group <%= node['cookbooks.haproxy']['group'] %>
+
+defaults
+  log     global
+  mode    http
+  retries 3
+  <% @defaults_timeouts.sort.map do | value, time | -%>
+  timeout <%= value %> <%= time %>
+  <% end -%>
+  <% @defaults_options.sort.each do | option | -%>
+  option <%= option %>
+  <% end -%>
+  balance  <%= node['cookbooks.haproxy']['balance_algorithm'] %>
+
+# Set up application listeners here.
+
+frontend http
+  maxconn <%= node['cookbooks.haproxy']['frontend_max_connections'] %>
+  bind <%= node['cookbooks.haproxy']['incoming_address'] %>:<%= node['cookbooks.haproxy']['incoming_port'] %>
+  default_backend servers-http
+
+<% if node['cookbooks.haproxy']['enable_ssl'] -%>
+frontend https
+  maxconn <%= node['cookbooks.haproxy']['frontend_ssl_max_connections'] %>
+  mode tcp
+  bind <%= node['cookbooks.haproxy']['ssl_incoming_address'] %>:<%= node['cookbooks.haproxy']['ssl_incoming_port'] %>
+  default_backend servers-https
+<% end -%>
+
+backend servers-http
+  <% @pool_members.each do |member| -%>
+  server <%= member[:hostname] %> <%= member[:ipaddress] %>:<%= node['cookbooks.haproxy']['member_port'] %> weight 1 maxconn <%= node['cookbooks.haproxy']['member_max_connections'] %> check
+  <% end -%>
+  <% if node["cookbooks.haproxy"]["httpchk"] -%>
+  option httpchk <%= node["cookbooks.haproxy"]["httpchk"] %>
+  <% end -%>
+
+<% if node['cookbooks.haproxy']['enable_ssl'] -%>
+backend servers-https
+  mode tcp
+  option ssl-hello-chk
+  <% @pool_members.each do |member| -%>
+  server <%= member[:hostname] %> <%= member[:ipaddress] %>:<%= node['cookbooks.haproxy']['ssl_member_port'] %> weight 1 maxconn <%= node['cookbooks.haproxy']['member_max_connections'] %> check
+  <% end -%>
+  <% if node["cookbooks.haproxy"]["ssl_httpchk"] -%>
+  option httpchk <%= node["cookbooks.haproxy"]["ssl_httpchk"] %>
+  <% end -%>
+<% end -%>
+
+<% if node['cookbooks.haproxy']['enable_admin'] -%>
+listen admin <%= node['cookbooks.haproxy']['admin']['address_bind'] %>:<%= node['cookbooks.haproxy']['admin']['port'] %>
+  mode http
+  stats uri /
+<% end -%>

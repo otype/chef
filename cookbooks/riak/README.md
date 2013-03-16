@@ -1,0 +1,143 @@
+Riak Cookbook
+=============
+
+Overview
+========
+
+Riak is a Dynamo-inspired key/value store that scales predictably and easily.  Riak combines a decentralized key/value store, a flexible map/reduce engine, and a friendly HTTP/JSON query interface to provide a database ideally suited for Web applications. And, without any object-relational mappers and other heavy middleware, applications built on Riak can be both simpler and more powerful.  For complete documentation and source code, see the Riak home page at [Basho][1].
+
+
+Getting Started
+===============
+
+The Riak cookbook can be used just by adding "cookbooks.riak" to the runlist for a node.  The default settings will cause Riak to be installed and configured. All the config options exist in the `node['cookbooks.riak']['config']` namespace and can be set to the appropriate Erlang data type with the methods : to_erl_string and to_erl_tuple . For more information see the [erlang_template_helper repository][6]
+
+
+Package Installation
+--------------------
+
+There are two options for package installation: binary and source.  If you are using a Red Hat, CentOS, Fedora, Debian or Ubuntu distributions, binary installation is recommended and is the default.  If you choose to do a source installation, be sure you are using Erlang/OTP R15B01 or later.
+
+The package parameters available are version, type and, optionally for source installation, an install prefix:
+
+	node['cookbooks.riak']['package']['version']['major'] = "1"
+	node['cookbooks.riak']['package']['version']['minor'] = "3"
+	node['cookbooks.riak']['package']['version']['incremental'] = "0"
+
+
+Source Installation
+------------------
+
+The cookbooks.riak::source recipe can be used to install Riak from source. The source installation requires the build-essential and erlang cookbooks.
+
+
+Basic Configuration
+-------------------
+
+Most Riak configuration is for networking, Erlang, and storage backends.  The only interesting configuration options outside of those is the filesystem path where ring state files should be stored.
+
+	node['cookbooks.riak']['config']['riak_core']['ring_state_dir'] = "/var/lib/cookbooks.riak/ring".to_erl_string
+
+
+Networking
+----------
+
+Riak clients communicate with the nodes in the cluster through either the HTTP or Protobufs interfaces, both of which may be used simultaneously.  Configuration for each interface includes the IP address and TCP port on which to listen for client connections.  The default for the HTTP interface is localhost:8098 and for Protobufs 0.0.0.0:8087, meaning client connections to any address on the server, TCP port 8087, are accepted.  As the default HTTP configuration is inaccessible to other nodes, it must be changed if you want clients to use the HTTP interface.
+
+	node['cookbooks.riak']['config']['riak_core']['http'] = [["127.0.0.1", 8098]]
+	node['cookbooks.riak']['config']['riak_api']['pb_ip'] = "0.0.0.0"
+	node['cookbooks.riak']['config']['riak_api']['pb_port'] = 8087
+
+Intra-cluster handoff occurs over a dedicated port, which defaults to 8099.
+
+	node['cookbooks.riak']['config']['riak_core']['handoff_port'] = 8099
+
+Finally, by default, options are included in the configuration to define the set of ports used for Erlang inter-node communication.  
+
+	node['cookbooks.riak']['config']['kernel']['inet_dist_listen_min'] = 6000
+	node['cookbooks.riak']['config']['kernel']['inet_dist_listen_max'] = 7999
+
+Erlang
+------
+
+A number of Erlang parameters may be configured through the cookbook.  The node name and cookie are most important for creating multi-node clusters.  The rest of the parameters are primarily for performance tuning, with kernel polling and smp enabled by default.  Any available Erlang environment variable may be set with the env vars hash. 
+
+	node['cookbooks.riak']['args']['-name'] = "cookbooks.riak@#{node['ipaddress']}"
+	node['cookbooks.riak']['args']['-setcookie'] = "cookbooks.riak"
+	node['cookbooks.riak']['args']['+K'] = (true | false)
+	node['cookbooks.riak']['args']['+A'] = 64
+	node['cookbooks.riak']['args']['+W'] = "w"
+	node['cookbooks.riak']['args']['-env']['ERL_MAX_PORTS'] = 4096
+	node['cookbooks.riak']['args']['-env']['ERL_FULLSWEEP_AFTER'] = 0
+	node['cookbooks.riak']['args']['-env']['ERL_CRASH_DUMP'] = "/var/log/cookbooks.riak/erl_crash.dump"
+
+Storage Backends
+================
+
+Riak requires specification of a storage backend along with various backend storage options, specific to each backend.  While Riak supports specification of different backends for different buckets, the Chef cookbook does not yet allow such configurations. The backend options are Bitcask (the default) or LevelDB.  The typical configuration options and their defaults are given below.
+
+
+Bitcask
+-------
+[Bitcask][2] is an Erlang application that provides an API for storing and retrieving key/value data into a log-structured hash table that provides very fast access.
+
+	node['cookbooks.riak']['config']['bitcask']['data_root'] = "/var/lib/cookbooks.riak/bitcask".to_erl_string
+	node['cookbooks.riak']['config']['bitcask']['max_file_size'] = 2147483648
+	node['cookbooks.riak']['config']['bitcask']['open_timeout'] = 4
+	node['cookbooks.riak']['config']['bitcask']['sync_strategy'] = "none"
+	node['cookbooks.riak']['config']['bitcask']['frag_merge_trigger'] = 60
+	node['cookbooks.riak']['config']['bitcask']['dead_bytes_merge_trigger'] = 536870912
+	node['cookbooks.riak']['config']['bitcask']['frag_threshold'] = 40
+	node['cookbooks.riak']['config']['bitcask']['dead_bytes_threshold'] = 134217728
+	node['cookbooks.riak']['config']['bitcask']['small_file_threshold'] = 10485760
+	node['cookbooks.riak']['config']['bitcask']['expiry_secs'] = -1
+
+
+eLevelDB
+--------
+
+[eLevelDB][3] is an Erlang application that encapsulates LevelDB, an open source on-disk key-value store written by Google Fellows Jeffrey Dean and Sanjay Ghemawat. LevelDB's storage architecture is more like BigTable's memtable/sstable model than it is like Bitcask.
+
+	node['cookbooks.riak']['config']['eleveldb']['data_root'] = "/var/lib/cookbooks.riak/leveldb".to_erl_string
+
+Lager 
+-----
+
+[Lager][4] is the logging framework used within Riak. It can also be used with erlang/OTP. 
+
+
+	node['cookbooks.riak']['config']['lager']['crash_log'] = "/var/log/cookbooks.riak/crash.log".to_erl_string
+	node['cookbooks.riak']['config']['lager']['crash_log_date'] = "$D0".to_erl_string
+	node['cookbooks.riak']['config']['lager']['crash_log_msg_size']  = 65536
+	node['cookbooks.riak']['config']['lager']['crash_log_size'] = 10485760
+	node['cookbooks.riak']['config']['lager']['error_logger_redirect'] = true
+	node['cookbooks.riak']['config']['lager']['handlers']['lager_file_backend']['lager_error_log'] =  ["/var/log/cookbooks.riak/error.log".to_erl_string, "error", 10485760, "$D0".to_erl_string, 5].to_erl_tuple
+	node['cookbooks.riak']['config']['lager']['handlers']['lager_file_backend']['lager_console_log'] = ["/var/log/cookbooks.riak/console.log".to_erl_string, "info", 10485760, "$D0".to_erl_string, 5].to_erl_tuple
+
+Sysmon 
+------
+
+Sysmon monitors riaks gc process and logs relevant information to the status of garbage collection.
+
+	node['cookbooks.riak']['config']['sysmon']['process_limit'] = 30
+	node['cookbooks.riak']['config']['sysmon']['port_limit'] = 30
+	node['cookbooks.riak']['config']['sysmon']['gc_ms_limit'] = 50 #if gc takes longer than 50ms. Spam the log.
+	node['cookbooks.riak']['config']['sysmon']['heap_word_limit'] = 10485760
+	
+Index Merge
+-----------
+	node['cookbooks.riak']['config']['merge_index']['data_root'] = "/var/lib/cookbooks.riak/merge_index".to_erl_string
+	node['cookbooks.riak']['config']['merge_index']['buffer_rollover_size'] = 1048576
+	node['cookbooks.riak']['config']['merge_index']['max_compact_segments'] = 20
+Notes
+-----
+The Chef 10.10 release has a [bug][5] where changes to a file resource does not properly notify restart. This is fixed in Chef 10.12.
+
+
+
+[1]: http://basho.com/
+[2]: http://wiki.basho.com/Bitcask 
+[3]: http://wiki.basho.com/LevelDB.html
+[4]: https://github.com/basho/lager
+[5]: http://tickets.opscode.com/browse/CHEF-3125
+[6]: https://github.com/basho/erlang_template_helper
