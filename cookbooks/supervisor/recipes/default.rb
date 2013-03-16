@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe "cookbooks.python"
+include_recipe "python"
 
 python_pip "cookbooks.supervisor" do
   action :upgrade

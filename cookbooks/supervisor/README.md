@@ -12,7 +12,7 @@ Tested on Ubuntu 10.04
 
 ## Cookbooks:
 
-* cookbooks.python
+* python
 
 Attributes
 ==========
@@ -110,7 +110,7 @@ Recipes
 default
 -------
 
-Includes the cookbooks.python recipe, installs the cookbooks.supervisor PIP package and
+Includes the python recipe, installs the cookbooks.supervisor PIP package and
 sets up cookbooks.supervisor.
 
 License and Author

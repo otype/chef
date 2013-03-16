@@ -1,6 +1,6 @@
 #
 # Author:: Seth Chisamore <schisamo@opscode.com>
-# Cookbook Name:: cookbooks.python
+# Cookbook Name:: python
 # Provider:: pip
 #
 # Copyright:: 2011, Opscode, Inc <legal@opscode.com>
@@ -162,8 +162,8 @@ end
 def which_pip(nr)
   if (nr.respond_to?("virtualenv") && nr.virtualenv)
     ::File.join(nr.virtualenv,'/bin/pip')
-  elsif "#{node['cookbooks.python']['install_method']}".eql?("source")
-    ::File.join("#{node['cookbooks.python']['prefix_dir']}","/bin/pip")
+  elsif "#{node['python']['install_method']}".eql?("source")
+    ::File.join("#{node['python']['prefix_dir']}","/bin/pip")
   else
     'pip'
   end

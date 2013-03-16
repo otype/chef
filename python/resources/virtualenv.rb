@@ -1,7 +1,7 @@
 #
 # Author:: Seth Chisamore <schisamo@opscode.com>
-# Cookbook Name:: cookbooks.python
-# Resource:: pip
+# Cookbook Name:: python
+# Resource:: virtualenv
 #
 # Copyright:: 2011, Opscode, Inc <legal@opscode.com>
 #
@@ -18,12 +18,10 @@
 # limitations under the License.
 #
 
-actions :install, :upgrade, :remove, :purge
+actions :create, :delete
 
-attribute :package_name, :kind_of => String, :name_attribute => true
-attribute :version, :default => nil
-attribute :timeout, :default => 900
-attribute :virtualenv, :kind_of => String
-attribute :user, :regex => Chef::Config[:user_valid_regex]
+attribute :path, :kind_of => String, :name_attribute => true
+attribute :interpreter, :default => 'python'
+attribute :owner, :regex => Chef::Config[:user_valid_regex]
 attribute :group, :regex => Chef::Config[:group_valid_regex]
-attribute :options, :kind_of => String, :default => ''
+attribute :options, :kind_of => String

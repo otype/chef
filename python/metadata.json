@@ -1,5 +1,5 @@
 {
-  "name": "cookbooks.python",
+  "name": "python",
   "description": "Installs Python, pip and virtualenv. Includes LWRPs for managing Python packages with `pip` and `virtualenv` isolated Python environments.",
   "long_description": "",
   "maintainer": "Opscode, Inc.",
@@ -33,9 +33,9 @@
   "groupings": {
   },
   "recipes": {
-    "python": "Installs cookbooks.python, pip, and virtualenv",
-    "python::package": "Installs cookbooks.python using packages.",
-    "python::source": "Installs cookbooks.python from source.",
+    "python": "Installs python, pip, and virtualenv",
+    "python::package": "Installs python using packages.",
+    "python::source": "Installs python from source.",
     "python::pip": "Installs pip from source.",
     "python::virtualenv": "Installs virtualenv using the python_pip resource."
   },

@@ -1,6 +1,6 @@
 #
 # Author:: Seth Chisamore <schisamo@opscode.com>
-# Cookbook Name:: cookbooks.python
+# Cookbook Name:: python
 # Recipe:: package
 #
 # Copyright 2011, Opscode, Inc.
@@ -20,19 +20,19 @@
 
 major_version = node['platform_version'].split('.').first.to_i
 
-# COOK-1016 Handle RHEL/CentOS namings of cookbooks.python packages, by installing EPEL
+# COOK-1016 Handle RHEL/CentOS namings of python packages, by installing EPEL
 # repo & package
 if platform_family?('rhel') && major_version < 6
   include_recipe 'yum::epel'
   python_pkgs = ["python26", "python26-devel"]
-  node['cookbooks.python']['binary'] = "/usr/bin/python26"
+  node['python']['binary'] = "/usr/bin/python26"
 else
   python_pkgs = value_for_platform_family(
-                  "debian" => ["cookbooks.python","cookbooks.python-dev"],
-                  "rhel" => ["cookbooks.python","cookbooks.python-devel"],
-                  "freebsd" => ["cookbooks.python"],
+                  "debian" => ["python","python-dev"],
+                  "rhel" => ["python","python-devel"],
+                  "freebsd" => ["python"],
                   "smartos" => ["python27"],
-                  "default" => ["cookbooks.python","cookbooks.python-dev"]
+                  "default" => ["python","python-dev"]
                 )
 end
 

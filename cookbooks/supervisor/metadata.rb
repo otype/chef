@@ -7,7 +7,7 @@ version           "0.4.0"
 
 recipe "cookbooks.supervisor", "Installs and configures supervisord"
 
-depends "cookbooks.python"
+depends "python"
 
 %w{ ubuntu debian }.each do |os|
   supports os

@@ -1,7 +1,7 @@
 Description
 ===========
 
-Installs and configures Python.  Also includes LWRPs for managing cookbooks.python packages with `pip` and `virtualenv` isolated Python environments.
+Installs and configures Python.  Also includes LWRPs for managing python packages with `pip` and `virtualenv` isolated Python environments.
 
 Requirements
 ============
@@ -25,7 +25,7 @@ Attributes
 
 See `attributes/default.rb` for default values.
 
-* `node["cookbooks.python"]["install_method"]` - method to install cookbooks.python with, default `package`.
+* `node["python"]["install_method"]` - method to install python with, default `package`.
 
 The file also contains the following attributes:
 
@@ -43,7 +43,7 @@ This cookbook includes LWRPs for managing:
 `python_pip`
 ------------
 
-Install packages using the new hotness in Python package management...[`pip`](http://pypi.cookbooks.python.org/pypi/pip).  Yo dawg...easy_install is so 2009, you better ask your local Pythonista if you don't know! The usage semantics are like that of any normal package provider.
+Install packages using the new hotness in Python package management...[`pip`](http://pypi.python.org/pypi/pip).  Yo dawg...easy_install is so 2009, you better ask your local Pythonista if you don't know! The usage semantics are like that of any normal package provider.
 
 # Actions
 
@@ -90,7 +90,7 @@ Install packages using the new hotness in Python package management...[`pip`](ht
 `python_virtualenv`
 -------------------
 
-[`virtualenv`](http://pypi.cookbooks.python.org/pypi/virtualenv) is a great tool that creates isolated cookbooks.python environments.  Think of it as RVM without all those hipsters and tight jeans.
+[`virtualenv`](http://pypi.python.org/pypi/virtualenv) is a great tool that creates isolated python environments.  Think of it as RVM without all those hipsters and tight jeans.
 
 # Actions
 
@@ -136,7 +136,7 @@ Usage
 default
 -------
 
-Include default recipe in a run list, to get `cookbooks.python`, `pip` and `virtualenv`. Installs cookbooks.python by package or source depending on the platform.
+Include default recipe in a run list, to get `python`, `pip` and `virtualenv`. Installs python by package or source depending on the platform.
 
 package
 -------

@@ -1,9 +1,9 @@
 #
 # Author:: Seth Chisamore <schisamo@opscode.com>
-# Cookbook Name:: cookbooks.python
-# Resource:: virtualenv
+# Cookbook Name:: python
+# Recipe:: default
 #
-# Copyright:: 2011, Opscode, Inc <legal@opscode.com>
+# Copyright 2011, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,10 +18,6 @@
 # limitations under the License.
 #
 
-actions :create, :delete
-
-attribute :path, :kind_of => String, :name_attribute => true
-attribute :interpreter, :default => 'cookbooks.python'
-attribute :owner, :regex => Chef::Config[:user_valid_regex]
-attribute :group, :regex => Chef::Config[:group_valid_regex]
-attribute :options, :kind_of => String
+include_recipe "python::#{node['python']['install_method']}"
+include_recipe "python::pip"
+include_recipe "python::virtualenv"

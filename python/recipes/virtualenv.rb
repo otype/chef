@@ -1,6 +1,6 @@
 #
 # Author:: Seth Chisamore <schisamo@opscode.com>
-# Cookbook Name:: cookbooks.python
+# Cookbook Name:: python
 # Recipe:: virtualenv
 #
 # Copyright 2011, Opscode, Inc.
@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-include_recipe "cookbooks.python::pip"
+include_recipe "python::pip"
 
 python_pip "virtualenv" do
   action :install

@@ -1,6 +1,6 @@
 #
 # Author:: Seth Chisamore <schisamo@opscode.com>
-# Cookbook Name:: cookbooks.python
+# Cookbook Name:: python
 # Provider:: virtualenv
 #
 # Copyright:: 2011, Opscode, Inc <legal@opscode.com>
@@ -29,7 +29,7 @@ end
 action :create do
   unless exists?
     Chef::Log.info("Creating virtualenv #{@new_resource} at #{@new_resource.path}")
-    execute "#{virtualenv_cmd} --cookbooks.python=#{@new_resource.interpreter} #{@new_resource.options} #{@new_resource.path}" do
+    execute "#{virtualenv_cmd} --python=#{@new_resource.interpreter} #{@new_resource.options} #{@new_resource.path}" do
       user new_resource.owner if new_resource.owner
       group new_resource.group if new_resource.group
     end
@@ -60,8 +60,8 @@ def load_current_resource
 end
 
 def virtualenv_cmd()
-  if "#{node['cookbooks.python']['install_method']}".eql?("source")
-    ::File.join("#{node['cookbooks.python']['prefix_dir']}","/bin/virtualenv")
+  if "#{node['python']['install_method']}".eql?("source")
+    ::File.join("#{node['python']['prefix_dir']}","/bin/virtualenv")
   else
     "virtualenv"
   end
