@@ -11,13 +11,13 @@
 # Version:  @(#)skeleton  1.9  26-Feb-2001  miquels@cistron.nl
 #
 ### BEGIN INIT INFO
-# Provides:          cookbooks.supervisor
+# Provides:          supervisor
 # Required-Start:    $remote_fs $network $named
 # Required-Stop:     $remote_fs $network $named
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Start/stop cookbooks.supervisor
-# Description:       Start/stop cookbooks.supervisor daemon and its configured
+# Short-Description: Start/stop supervisor
+# Description:       Start/stop supervisor daemon and its configured
 #                    subprocesses.
 ### END INIT INFO
 
@@ -25,21 +25,21 @@
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON="$(which supervisord)"
 NAME=supervisord
-DESC=cookbooks.supervisor
+DESC=supervisor
 
 test -n "$DAEMON" || exit 0
 test -x $DAEMON || exit 0
 
-LOGDIR=/var/log/cookbooks.supervisor
+LOGDIR=/var/log/supervisor
 PIDFILE=/var/run/$NAME.pid
 DODTIME=5                   # Time to wait for the server to die, in seconds
                             # If this value is set too low you might not
                             # let some servers to die gracefully and
                             # 'restart' will not work
 
-# Include cookbooks.supervisor defaults if available
-if [ -f /etc/default/cookbooks.supervisor ] ; then
-    . /etc/default/cookbooks.supervisor
+# Include supervisor defaults if available
+if [ -f /etc/default/supervisor ] ; then
+    . /etc/default/supervisor
 fi
 
 set -e

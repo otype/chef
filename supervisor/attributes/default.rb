@@ -1,9 +1,8 @@
 #
-# Author:: Gilles Devaux <gilles.devaux@gmail.com>
-# Cookbook Name:: cookbooks.supervisor
-# Resource:: group
+# Cookbook Name:: supervisor
+# Attribute File:: default
 #
-# Copyright:: 2011, Formspring.me
+# Copyright 2011, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,13 +17,13 @@
 # limitations under the License.
 #
 
-actions :enable, :disable, :start, :stop, :restart, :reload
-
-def initialize(*args)
-  super
-  @action = [:enable, :start]
-end
-
-attribute :group_name, :kind_of => String, :name_attribute => true
-attribute :programs, :kind_of => Array, :default => []
-attribute :priority, :kind_of => Integer
+default['supervisor']['inet_port'] = nil
+default['supervisor']['inet_username'] = nil
+default['supervisor']['inet_password'] = nil
+default['supervisor']['dir'] = '/etc/supervisor.d'
+default['supervisor']['log_dir'] = '/var/log/supervisor'
+default['supervisor']['logfile_maxbytes'] = '50MB'
+default['supervisor']['logfile_backups'] = 10
+default['supervisor']['loglevel'] = 'info'
+default['supervisor']['minfds'] = 1024
+default['supervisor']['minprocs'] = 200

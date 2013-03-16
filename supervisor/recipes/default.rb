@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: cookbooks.supervisor
+# Cookbook Name:: supervisor
 # Recipe:: default
 #
 # Copyright 2011, Opscode, Inc.
@@ -19,12 +19,12 @@
 
 include_recipe "python"
 
-python_pip "cookbooks.supervisor" do
+python_pip "supervisor" do
   action :upgrade
-  version node['cookbooks.supervisor']['version'] if node['cookbooks.supervisor']['version']
+  version node['supervisor']['version'] if node['supervisor']['version']
 end
 
-directory node['cookbooks.supervisor']['dir'] do
+directory node['supervisor']['dir'] do
   owner "root"
   group "root"
   mode "755"
@@ -36,16 +36,16 @@ template "/etc/supervisord.conf" do
   group "root"
   mode "644"
   variables({
-    :inet_port => node['cookbooks.supervisor']['inet_port'],
-    :inet_username => node['cookbooks.supervisor']['inet_username'],
-    :inet_password => node['cookbooks.supervisor']['inet_password'],
-    :supervisord_minfds => node['cookbooks.supervisor']['minfds'],
-    :supervisord_minprocs => node['cookbooks.supervisor']['minprocs'],
-    :supervisor_version => node['cookbooks.supervisor']['version'],
+    :inet_port => node['supervisor']['inet_port'],
+    :inet_username => node['supervisor']['inet_username'],
+    :inet_password => node['supervisor']['inet_password'],
+    :supervisord_minfds => node['supervisor']['minfds'],
+    :supervisord_minprocs => node['supervisor']['minprocs'],
+    :supervisor_version => node['supervisor']['version'],
   })
 end
 
-directory node['cookbooks.supervisor']['log_dir'] do
+directory node['supervisor']['log_dir'] do
   owner "root"
   group "root"
   mode "755"
@@ -54,21 +54,21 @@ end
 
 case node['platform']
 when "debian", "ubuntu"
-  template "/etc/init.d/cookbooks.supervisor" do
-    source "cookbooks.supervisor.init.erb"
+  template "/etc/init.d/supervisor" do
+    source "supervisor.init.erb"
     owner "root"
     group "root"
     mode "755"
   end
 
-  template "/etc/default/cookbooks.supervisor" do
-    source "cookbooks.supervisor.default.erb"
+  template "/etc/default/supervisor" do
+    source "supervisor.default.erb"
     owner "root"
     group "root"
     mode "644"
   end
 
-  service "cookbooks.supervisor" do
+  service "supervisor" do
     action [:enable, :start]
   end
 end

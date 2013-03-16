@@ -1,6 +1,6 @@
 {
-  "name": "cookbooks.supervisor",
-  "description": "Installs cookbooks.supervisor and provides resources to configure services",
+  "name": "supervisor",
+  "description": "Installs supervisor and provides resources to configure services",
   "long_description": "",
   "maintainer": "Noah Kantrowitz",
   "maintainer_email": "noah@opscode.com",

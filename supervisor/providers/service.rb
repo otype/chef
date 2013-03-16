@@ -1,6 +1,6 @@
 #
 # Author:: Noah Kantrowitz <noah@opscode.com>
-# Cookbook Name:: cookbooks.supervisor
+# Cookbook Name:: supervisor
 # Provider:: service
 #
 # Copyright:: 2011, Opscode, Inc <legal@opscode.com>
@@ -24,9 +24,9 @@ action :enable do
     user "root"
   end
 
-  template "#{node['cookbooks.supervisor']['dir']}/#{new_resource.service_name}.conf" do
+  template "#{node['supervisor']['dir']}/#{new_resource.service_name}.conf" do
     source "program.conf.erb"
-    cookbook "cookbooks.supervisor"
+    cookbook "supervisor"
     owner "root"
     group "root"
     mode "644"
@@ -41,7 +41,7 @@ action :disable do
     user "root"
   end
 
-  file "#{node['cookbooks.supervisor']['dir']}/#{new_resource.service_name}.conf" do
+  file "#{node['supervisor']['dir']}/#{new_resource.service_name}.conf" do
     action :delete
     notifies :run, resources(:execute => "supervisorctl update"), :immediately
   end

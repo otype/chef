@@ -1,6 +1,6 @@
 #
 # Author:: Gilles Devaux <gilles.devaux@gmail.com>
-# Cookbook Name:: cookbooks.supervisor
+# Cookbook Name:: supervisor
 # Resource:: fcgi
 #
 # Copyright:: 2011, Formspring.me
