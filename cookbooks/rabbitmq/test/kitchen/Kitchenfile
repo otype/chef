@@ -1,3 +1,0 @@
-cookbook "rabbitmq" do
-  runtimes []
-end
