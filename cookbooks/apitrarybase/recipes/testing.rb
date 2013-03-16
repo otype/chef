@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: apitrary_base
+# Cookbook Name:: apitrarybase
 # Recipe:: testing
 #
 # Copyright 2012, apitrary
