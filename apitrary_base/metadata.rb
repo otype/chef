@@ -1,4 +1,4 @@
-name              "apitrarybase"
+name              "apitrary_base"
 maintainer       "apitrary"
 maintainer_email "hgs@apitrary.com"
 license          "All rights reserved"
