@@ -9,6 +9,13 @@
 
 include_recipe "user::default"
 
+%w(python-dev).each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
+
 user_account 'genapi' do
   comment   'Genapi User'
   home      '/home/genapi'
