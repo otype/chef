@@ -8,6 +8,7 @@
 #
 directory "/home/ubuntu/.ssh" do
   owner "ubuntu"
+  group "ubuntu"
   mode 0755
   action :create
   not_if {File.exists?("/home/ubuntu/.ssh")}
