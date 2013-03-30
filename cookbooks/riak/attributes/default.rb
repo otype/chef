@@ -60,8 +60,8 @@ default['riak']['config']['riak_api']['pb_port'] = 8087
 default['riak']['config']['riak_core']['ring_state_dir'] = "#{platform_data_dir}/ring".to_erl_string
 default['riak']['config']['riak_core']['ring_creation_size'] = 64
 default['riak']['config']['riak_core']['http'] = [["#{node['ipaddress']}".to_erl_string, 8098].to_erl_tuple]
-#default['riak']['config']['riak_core']['https'] = [["#{node['ipaddress']}".to_erl_string, 8098].to_erl_tuple]
-#default['riak']['config']['riak_core']['ssl'] = [["certfile", "./etc/cert.pem".to_erl_string].to_erl_tuple, ["keyfile", "./etc/key.pem".to_erl_string].to_erl_tuple]
+default['riak']['config']['riak_core']['https'] = [["#{node['ipaddress']}".to_erl_string, 8069].to_erl_tuple]
+default['riak']['config']['riak_core']['ssl'] = [["certfile", "/etc/riak/ssl/server.crt".to_erl_string].to_erl_tuple, ["keyfile", "/etc/riak/ssl/server.key".to_erl_string].to_erl_tuple]
 default['riak']['config']['riak_core']['handoff_port'] = 8099
 #default['riak']['config']['riak_core']['handoff_ssl_options'] = [["certfile", "tmp/erlserver.pem".to_erl_string].to_erl_tuple]
 default['riak']['config']['riak_core']['dtrace_support'] = false
@@ -136,9 +136,9 @@ default['riak']['config']['sasl']['sasl_error_logger'] = false
 default['riak']['config']['sasl']['utc_log'] = true
 
 # riak_control
-default['riak']['config']['riak_control']['enabled'] = false
+default['riak']['config']['riak_control']['enabled'] = true
 default['riak']['config']['riak_control']['auth'] = "userlist"
-default['riak']['config']['riak_control']['userlist'] = [["user".to_erl_string,"pass".to_erl_string].to_erl_tuple]
+default['riak']['config']['riak_control']['userlist'] = [["apitraryadmin".to_erl_string,"aix9mio6ahtaeHai5eeshi2va".to_erl_string].to_erl_tuple]
 default['riak']['config']['riak_control']['admin'] = true
 
 #patches
