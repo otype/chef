@@ -21,7 +21,7 @@ loadbalancer_nodes.each do |lb_node|
 end
 
 # Get all app server nodes IPs
-app_server_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:appserver")
+app_server_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:appserver-ng")
 
 # Allow connections from app server nodes
 app_server_nodes.each do |app_node|
