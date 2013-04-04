@@ -1,6 +1,6 @@
 [program:deployr]
 command=/usr/local/bin/celery worker -A tasks -l info
-user=deployr
+user=root
 directory=/home/deployr
 autorestart=true
 redirect_stderr=true
