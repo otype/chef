@@ -17,9 +17,9 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 
 [inet_http_server]
 <% if node.chef_environment == "LIVE" %>
-    port = 127.0.0.1:9001
+port = 127.0.0.1:9001
 <% elsif node.chef_environment == "DEV" %>
-    port = :9001
+port = :9001
 <% end %>
 username = <%= @node['supervisor']['xml-rpc-user'] %>
 password = <%= @node['supervisor']['xml-rpc-password'] %>
