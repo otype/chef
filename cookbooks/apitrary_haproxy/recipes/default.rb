@@ -39,7 +39,7 @@ if haproxy_config_installed.empty?
     end
   end
 
-  %w{frontends/http_proxy backends/launchpad_cluster backends/www_cluster listen/admin}.each do |dir|
+  %w{frontends/http_proxy listen/admin}.each do |dir|
     directory "/etc/haproxy/#{dir}" do
       mode "0755"
       owner "root"
@@ -77,50 +77,6 @@ if haproxy_config_installed.empty?
     owner "root"
     group "root"
     mode 0644
-  end
-
-  template "/etc/haproxy/frontends/http_proxy/10-www" do
-    source "frontends-tpl.erb"
-    owner "root"
-    group "root"
-    mode 0644
-  end
-
-  template "/etc/haproxy/frontends/http_proxy/20-launchpad" do
-    source "frontends-tpl.erb"
-    owner "root"
-    group "root"
-    mode 0644
-    variables(
-        :subdomain => "launchpad",
-        :webacl => "launchpad"
-    )
-  end
-
-  # We need this temporarily before we switch our old LIVE apitrary.com to the new server.
-  web_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:railsweb")
-
-  template "/etc/haproxy/backends/launchpad_cluster/00-base" do
-    source "backends-tpl.erb"
-    owner "root"
-    group "root"
-    mode 0644
-    variables(
-        :webacl => "launchpad",
-        :subdomain => "launchpad",
-        :webnodes => web_nodes
-    )
-  end
-
-  template "/etc/haproxy/backends/www_cluster/00-base" do
-    source "backends-tpl.erb"
-    owner "root"
-    group "root"
-    mode 0644
-    variables(
-        :webacl => "www",
-        :webnodes => web_nodes
-    )
   end
 
   service "haproxy" do

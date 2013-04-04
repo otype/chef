@@ -1,5 +1,5 @@
 [program:deployr_<%= @deployr_mode%>]
-command=/usr/bin/python /usr/bin/deployr.py --mode=<%= @deployr_mode%>
+command=/usr/bin/python /usr/local/bin/deployr.py --mode=<%= @deployr_mode%>
 directory=/home/deployr
 user=root
 autorestart=true

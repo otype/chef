@@ -6,6 +6,11 @@
 #
 # All rights reserved - Do Not Redistribute
 #
+include_recipe "supervisor::default"
+
+%w{libcurl4-openssl-dev protobuf-compiler}.each do |pkg|
+  package pkg
+end
 
 directory "/root/.ssh" do
   owner "root"

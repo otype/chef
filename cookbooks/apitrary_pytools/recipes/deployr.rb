@@ -7,7 +7,8 @@
 # All rights reserved - Do Not Redistribute
 #
 include_recipe "user::default"
-include_recipe "supervisor"
+include_recipe "supervisor::default"
+include_recipe "apitrary_pytools::default"
 
 user_account 'deployr' do
   comment   'Deployr User'
@@ -37,7 +38,7 @@ template "/etc/deployr/deployr.conf" do
 end
 
 if node['roles'].include?("loadbalancer")
-  template "/etc/supervisor.d/deployr_balance.conf" do
+  template "/etc/supervisor/conf.d/deployr_balance.conf" do
     source "supervisor_deployr.conf.erb"
     mode 0644
     owner "root"
@@ -53,7 +54,7 @@ if node['roles'].include?("loadbalancer")
     action :nothing
   end
 else
-  template "/etc/supervisor.d/deployr_deploy.conf" do
+  template "/etc/supervisor/conf.d/deployr_deploy.conf" do
     source "supervisor_deployr.conf.erb"
     mode 0644
     owner "root"

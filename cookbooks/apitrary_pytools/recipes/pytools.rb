@@ -7,17 +7,14 @@
 # All rights reserved - Do Not Redistribute
 #
 include_recipe "user::default"
-include_recipe "supervisor"
+include_recipe "supervisor::default"
+include_recipe "apitrary_pytools::default"
 
 user_account 'pytools' do
   comment   'PyTools User'
   home      '/home/pytools'
   shell     '/usr/sbin/nologin'
   not_if {File.exists?("/home/pytools")}
-end
-
-%w{libcurl4-openssl-dev protobuf-compiler}.each do |pkg|
-  package pkg
 end
 
 execute "pip-install-pytools" do

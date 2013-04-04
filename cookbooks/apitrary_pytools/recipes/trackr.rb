@@ -6,6 +6,8 @@
 #
 # All rights reserved - Do Not Redistribute
 #
+include_recipe "apitrary_pytools::default"
+include_recipe "supervisor::default"
 include_recipe "apitrary_pytools::genapi"
 
 user_account 'trackr' do
@@ -15,7 +17,7 @@ user_account 'trackr' do
   not_if {File.exists?("/home/trackr")}
 end
 
-template "/etc/supervisor.d/trackr.conf" do
+template "/etc/supervisor/conf.d/trackr.conf" do
   source "supervisor_trackr.conf.erb"
   mode 0644
   owner "root"

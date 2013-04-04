@@ -7,7 +7,8 @@
 # All rights reserved - Do Not Redistribute
 #
 include_recipe "user::default"
-include_recipe "supervisor"
+include_recipe "supervisor::default"
+include_recipe "apitrary_pytools::default"
 
 user_account 'genapi' do
   comment   'Genapi User'

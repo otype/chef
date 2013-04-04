@@ -8,7 +8,6 @@
 #
 
 include_recipe "user"
-include_recipe "htop"
 
 user_account 'devops' do
   comment   'apitrary DevOps'

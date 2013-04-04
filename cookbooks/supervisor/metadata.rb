@@ -1,13 +1,6 @@
-maintainer        "Noah Kantrowitz"
-maintainer_email  "noah@opscode.com"
-license           "Apache 2.0"
-description       "Installs supervisor and provides resources to configure services"
-version           "0.1"
-
-recipe "supervisor", "Installs and configures supervisord"
-
-depends "python"
-
-%w{ ubuntu debian }.each do |os|
-  supports os
-end
+maintainer       "apitrary"
+maintainer_email "official@apitrary.com"
+license          "All rights reserved"
+description      "Installs/Configures supervisor"
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
+version          "0.1.0"
