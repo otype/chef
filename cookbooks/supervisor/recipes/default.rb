@@ -8,3 +8,10 @@
 #
 
 package "supervisor"
+
+template "/etc/supervisord/conf.d" do
+  source "supervisord.conf.erb"
+  owner "root"
+  group "root"
+  mode "644"
+end
