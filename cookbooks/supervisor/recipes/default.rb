@@ -9,7 +9,7 @@
 
 package "supervisor"
 
-template "/etc/supervisor/conf.d" do
+template "/etc/supervisor/supervisord.conf" do
   source "supervisord.conf.erb"
   owner "root"
   group "root"
