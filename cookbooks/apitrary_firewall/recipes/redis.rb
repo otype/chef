@@ -9,14 +9,13 @@
 
 include_recipe "simple_iptables"
 
-# Get all loadbalancers
-railsweb_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:railsweb")
+# Get all app server nodes IPs
+app_server_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:appserver")
 
-# Allow connections from loadbalancer
-railsweb_nodes.each do |railsweb_node|
-  # Allow Nginx
+# Allow connections from app server nodes
+app_server_nodes.each do |app_node|
   simple_iptables_rule "system" do
-    rule "-p tcp -s #{railsweb_node['ipaddress']} --dport 6379"
+    rule "-p tcp -s #{app_node['ipaddress']} --dport 6379"
     jump "ACCEPT"
   end
 end
