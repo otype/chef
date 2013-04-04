@@ -16,7 +16,7 @@ user_account 'pytools' do
   not_if {File.exists?("/home/pytools")}
 end
 
-%w{protobuf-compiler}.each do |pkg|
+%w{libcurl4-openssl-dev protobuf-compiler}.each do |pkg|
   package pkg
 end
 
