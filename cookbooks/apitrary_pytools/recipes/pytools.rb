@@ -16,6 +16,10 @@ user_account 'pytools' do
   not_if {File.exists?("/home/pytools")}
 end
 
+%w{protobuf-compiler}.each do |pkg|
+  package pkg
+end
+
 execute "pip-install-pytools" do
   #command "pip install --upgrade git+ssh://git@github.com/apitrary/pytools.git@#{node[:tagname]}"
   command "pip install --upgrade git+ssh://git@github.com/apitrary/pytools.git"
