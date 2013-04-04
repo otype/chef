@@ -24,6 +24,7 @@ template "/etc/supervisor/conf.d/trackr.conf" do
   group "root"
   notifies :run, 'execute[supervisor_trackr_add]', :immediately
 end
+
 execute "supervisor_trackr_add" do
   user "root"
   command "supervisorctl stop trackr ; supervisorctl remove trackr ; supervisorctl reread && supervisorctl add trackr"

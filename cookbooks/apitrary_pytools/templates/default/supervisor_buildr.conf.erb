@@ -1,0 +1,8 @@
+[program:buildr]
+command=/usr/bin/python /usr/local/bin/buildr.py
+directory=/home/buildr
+user=buildr
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/var/log/buildr.log
+loglevel=info

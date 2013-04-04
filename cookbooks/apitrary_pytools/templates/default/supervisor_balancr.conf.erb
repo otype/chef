@@ -1,0 +1,7 @@
+[program:balancr]
+command=/usr/bin/python /usr/local/bin/deployr.py --mode=balance
+directory=/home/balancr
+user=root
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/var/log/balancr.log
