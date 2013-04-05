@@ -21,4 +21,5 @@ execute "pip-install-pytools" do
   #command "pip install --upgrade git+ssh://git@github.com/apitrary/pytools.git@#{node[:tagname]}"
   command "pip install git+ssh://git@github.com/apitrary/pytools.git"
   user "root"
+  not_if {File.exists?("/usr/local/bin/buildr.py")}
 end

@@ -22,7 +22,7 @@ end
 riak_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:riak-cluster")
 
 # Now, select a random node out of these ...
-riak_node = riak_nodes.sample(1)
+riak_node = riak_nodes.sample(1)[0]['ipaddress']
 
 template "/etc/supervisor/conf.d/buildr.conf" do
   source "supervisor_buildr.conf.erb"

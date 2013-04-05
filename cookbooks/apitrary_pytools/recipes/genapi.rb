@@ -21,4 +21,5 @@ execute "pip-install-genapi" do
   #command "pip install --upgrade git+ssh://git@github.com/apitrary/pygenapi.git@#{node[:tagname]}"
   command "pip install git+ssh://git@github.com/apitrary/pygenapi.git"
   user "root"
+  not_if {File.exists?("/usr/local/bin/genapi.py")}
 end
