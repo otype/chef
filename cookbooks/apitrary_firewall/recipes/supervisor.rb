@@ -32,8 +32,3 @@ app_server_nodes.each do |app_node|
   end
 end
 
-# Allow from all addresses (due to cloudcontrol)
-simple_iptables_rule "system" do
-  rule "-p tcp --dport 9001"
-  jump "ACCEPT"
-end
