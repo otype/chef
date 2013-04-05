@@ -46,6 +46,21 @@ loadbalancer_nodes.each do |lb_node|
   end
 end
 
+buildr_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:buildrserver")
+
+# Allow connections from loadbalancer to app server
+buildr_nodes.each do |buildr_node|
+  simple_iptables_rule "system" do
+    rule [
+             "-p tcp -s #{buildr_node['ipaddress']} --dport 8091",
+             "-p tcp -s #{buildr_node['ipaddress']} --dport 8098",
+             "-p tcp -s #{buildr_node['ipaddress']} --dport 8081",
+             "-p tcp -s #{buildr_node['ipaddress']} --dport 8087",
+         ]
+    jump "ACCEPT"
+  end
+end
+
 # Allow connections from everywhere to Riak Control Web Interface
 simple_iptables_rule "system" do
   rule "-p tcp --dport 8069"
