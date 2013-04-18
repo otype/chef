@@ -1,4 +1,5 @@
 NAME = <%= node.chef_environment.strip.downcase! %>
+ENV = <%= node.chef_environment.strip.downcase! %>
 SUPERVISORD_HOST = <%= node['supervisor']['host'] %>
 SUPERVISORD_WEB_PORT = <%= node['supervisor']['web_port'] %>
 SUPERVISOR_XML_RPC_USERNAME = <%= node['supervisor']['xml-rpc-user'] %>
