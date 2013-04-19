@@ -8,7 +8,7 @@
 #
 include_recipe "supervisor::default"
 
-%w{libcurl4-openssl-dev protobuf-compiler python-pip build-essential python-dev}.each do |pkg|
+%w{libcurl4-openssl-dev protobuf-compiler python-pip build-essential python-dev libzmq-dev libzmq1}.each do |pkg|
   package pkg
 end
 
