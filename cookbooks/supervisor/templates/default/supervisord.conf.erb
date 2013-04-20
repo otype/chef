@@ -17,7 +17,9 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 
 [inet_http_server]
 <% if node.chef_environment == "LIVE" %>
-port = 127.0.0.1:9001
+; This used to be localhost. Still leaving this in, just for reference.
+;port = 127.0.0.1:9001
+port = :9001
 <% elsif node.chef_environment == "DEV" %>
 port = :9001
 <% end %>
