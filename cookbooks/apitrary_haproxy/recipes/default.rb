@@ -39,7 +39,7 @@ if haproxy_config_installed.empty?
     end
   end
 
-  %w{frontends/http_proxy listen/admin}.each do |dir|
+  %w{frontends/http_proxy listen/admin frontends/riak_rest frontends/riak_protocol_buffer}.each do |dir|
     directory "/etc/haproxy/#{dir}" do
       mode "0755"
       owner "root"
@@ -74,6 +74,34 @@ if haproxy_config_installed.empty?
 
   template "/etc/haproxy/frontends/http_proxy/00-base" do
     source "frontends-00-base.erb"
+    owner "root"
+    group "root"
+    mode 0644
+  end
+
+  template "/etc/haproxy/backends/riak_rest_backend/100-riak_rest_backend" do
+    source "backends-100-riak-rest-backend.erb"
+    owner "root"
+    group "root"
+    mode 0644
+  end
+
+  template "/etc/haproxy/backends/riak_protocol_buffer_backend/100-riak_protocol_buffers_backend" do
+    source "backends-100-riak-protocol-buffer-backend.erb"
+    owner "root"
+    group "root"
+    mode 0644
+  end
+
+  template "/etc/haproxy/frontends/riak_rest/10-riak_rest" do
+    source "frontends-10-riak-rest.erb"
+    owner "root"
+    group "root"
+    mode 0644
+  end
+
+  template "/etc/haproxy/frontends/riak_protocol_buffer/10-riak_protocol_buffer" do
+    source "frontends-10-riak-protocol-buffer.erb"
     owner "root"
     group "root"
     mode 0644

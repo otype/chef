@@ -1,21 +1,23 @@
 global
         log 127.0.0.1   local0
         log 127.0.0.1   local1 notice
-        #log loghost    local0 info
-        maxconn 4096
-        #debug
-        #quiet
-        user haproxy
-        group haproxy
+        maxconn         65536
+        chroot          /var/chroot/haproxy
+        user            haproxy
+        group           haproxy
+        spread-checks   5
+        daemon
+        quiet
 
 defaults
-        log     global
+        log             global
         mode    http
         option  httplog
-        option  dontlognull
-        retries 3
-        option redispatch
-        maxconn 2000
+        option          dontlognull
+        option          redispatch
+        option          allbackups
+        retries         3
+        maxconn         65536
         contimeout      5000
         clitimeout      50000
         srvtimeout      50000
@@ -31,6 +33,39 @@ listen admin 0.0.0.0:22002
   mode http
   stats uri /
 <% end -%>
+
+backend riak_rest_backend
+    mode               http
+    balance            roundrobin
+    option             httpchk GET /ping
+    option             httplog
+    server riak1 m0.apitrary.net:8098 weight 75 maxconn 1024  check
+    server riak2 m1.apitrary.net:8098 weight 50 maxconn 1024  check
+
+frontend riak_rest
+    bind               127.0.0.1:8098
+    mode               http
+    option             contstats
+    default_backend    riak_rest_backend
+
+
+backend riak_protocol_buffer_backend
+    balance            leastconn
+    mode               tcp
+    option             tcpka
+    option             srvtcpka
+    server riak1 m0.apitrary.net:8087 weight 75 maxconn 1024  check
+    server riak2 m1.apitrary.net:8087 weight 50 maxconn 1024  check
+
+frontend riak_protocol_buffer
+    bind               127.0.0.1:8087
+    mode               tcp
+    option             tcplog
+    option             contstats
+    mode               tcp
+    option             tcpka
+    option             srvtcpka
+    default_backend    riak_protocol_buffer_backend
 
 frontend http_proxy
     bind 0.0.0.0:80
