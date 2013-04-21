@@ -31,14 +31,6 @@ app_server_nodes.each do |app_node|
   end
 end
 
-
-# For now, allow from all addresses (cloudcontrol)
-simple_iptables_rule "system" do
-  rule "-p tcp --dport 5672"
-  jump "ACCEPT"
-end
-
-
 # Allow RabbitMQ management console from public
 simple_iptables_rule "system" do
   rule "-p tcp --dport 15672"

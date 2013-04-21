@@ -48,7 +48,7 @@ end
 
 buildr_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:buildrserver")
 
-# Allow connections from loadbalancer to app server
+# Allow connections from buildr to app server
 buildr_nodes.each do |buildr_node|
   simple_iptables_rule "system" do
     rule [
