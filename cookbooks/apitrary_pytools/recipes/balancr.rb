@@ -17,12 +17,6 @@ user_account 'balancr' do
   not_if {File.exists?("/home/balancr")}
 end
 
-execute "pip-install-deployr" do
-  command "pip install git+ssh://git@github.com/apitrary/deployr.git"
-  user "root"
-  not_if {File.exists?("/usr/local/bin/deployr.py")}
-end
-
 directory "/etc/deployr" do
   owner "root"
   group "root"

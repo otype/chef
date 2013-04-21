@@ -1,5 +1,5 @@
 [program:balancr]
-command=/usr/bin/python /usr/local/bin/deployr.py --mode=balance
+command=/usr/local/bin/celery worker -A pybalancr.balancr_tasks -l info
 directory=/home/balancr
 user=root
 autorestart=true
