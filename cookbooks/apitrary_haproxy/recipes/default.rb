@@ -8,6 +8,11 @@
 #
 include_recipe "haproxy::default"
 
+%w{libcurl4-openssl-dev build-essential libpcre3-dev libssl0.9.8}.each do |pkg|
+  package pkg
+end
+
+
 haproxy_config_installed = `cat /etc/haproxy/haproxy.cfg | grep "# REMOVE THIS LINE HERE, THEN RESTART chef-client"`
 
 directory "/var/chroot/haproxy" do
