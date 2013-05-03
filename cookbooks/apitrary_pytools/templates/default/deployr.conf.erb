@@ -1,5 +1,6 @@
 NAME = <%= node.chef_environment.strip.downcase! %>
 ENV = <%= node.chef_environment.strip.downcase! %>
+SERVICE =
 SUPERVISORD_HOST = <%= node['supervisor']['host'] %>
 SUPERVISORD_WEB_PORT = <%= node['supervisor']['web_port'] %>
 SUPERVISOR_XML_RPC_USERNAME = <%= node['supervisor']['xml-rpc-user'] %>
@@ -13,3 +14,5 @@ BROKER_PORT = <%= node['rabbitmq']['broker_port'] %>
 LOGGING = <%= node['deployr']['logging'] %>
 DEPLOYR_CONFIG_FILE = <%= node['deployr']['deployr_config_file'] %>
 LOADBALANCER_DOMAINNAME = <%= node['deployr']['loadbalancer_domainname'] %>
+LOADBALANCER_RIAK_PB_PORT = <%= node['deployr']['loadbalancer_riak_pb_port'] %>
+LOADBALANCER_RIAK_REST_PORT = <%= node['deployr']['loadbalancer_riak_rest_port'] %>
