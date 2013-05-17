@@ -23,3 +23,8 @@ execute "pip-install-genapi" do
   user "root"
   not_if {File.exists?("/usr/local/bin/genapi.py")}
 end
+
+execute "pip-install-pycurl" do
+  command "pip install pycurl"
+  user "root"
+end
