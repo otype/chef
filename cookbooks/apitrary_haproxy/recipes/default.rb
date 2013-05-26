@@ -44,7 +44,7 @@ if haproxy_config_installed.empty?
     end
   end
 
-  %w{frontends/http_proxy listen/admin frontends/riak_rest frontends/riak_protocol_buffer}.each do |dir|
+  %w{frontends/http_proxy listen/admin frontends/riak_rest backends/riak_rest_backend frontends/riak_protocol_buffer}.each do |dir|
     directory "/etc/haproxy/#{dir}" do
       mode "0755"
       owner "root"
