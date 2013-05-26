@@ -1,6 +1,6 @@
 [program:buildr]
 <% if node.chef_environment == "LIVE" or node.chef_environment == "DEV" %>
-command=/usr/bin/python /usr/local/bin/buildr.py --riak_host=<%= @contact_node %>
+command=/usr/bin/python /usr/local/bin/buildr.py --riak_host=<%= @contact_node %> --riak_pb_port=<%= @contact_node_port %>
 <% else %>
 command=/usr/bin/python /usr/local/bin/buildr.py
 <% end %>

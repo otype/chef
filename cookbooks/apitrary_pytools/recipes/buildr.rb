@@ -29,7 +29,10 @@ template "/etc/supervisor/conf.d/buildr.conf" do
   mode 0644
   owner "root"
   group "root"
-  variables :contact_node => riak_node
+  variables(
+    :contact_node => riak_node,
+    :contact_node_port => 8187
+  )
   notifies :run, 'execute[supervisor_buildr_add]', :immediately
 end
 

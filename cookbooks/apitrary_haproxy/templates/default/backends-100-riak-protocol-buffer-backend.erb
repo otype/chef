@@ -2,5 +2,6 @@ balance            leastconn
 mode               tcp
 option             tcpka
 option             srvtcpka
-server riak1 m0.apitrary.net:8087 weight 75 maxconn 1024  check
-server riak2 m1.apitrary.net:8087 weight 50 maxconn 1024  check
+server riak0 m0.apitrary.net:8087 weight 75 maxconn 1024  check
+server riak1 m1.apitrary.net:8087 weight 50 maxconn 1024  check
+server riak2 m2.apitrary.net:8087 weight 50 maxconn 1024  check
