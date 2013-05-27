@@ -1,6 +1,6 @@
-[program:buildr]
+[program:buildr-0]
 <% if node.chef_environment == "LIVE" or node.chef_environment == "DEV" %>
-command=/usr/bin/python /usr/local/bin/buildr.py --riak_host=<%= @contact_node %> --riak_pb_port=<%= @contact_node_port %>
+command=/usr/bin/python /usr/local/bin/buildr.py --port=8000 --riak_host=<%= @contact_node %> --riak_pb_port=<%= @contact_node_port %>
 <% else %>
 command=/usr/bin/python /usr/local/bin/buildr.py
 <% end %>
@@ -11,3 +11,15 @@ redirect_stderr=true
 stdout_logfile=/var/log/buildr.log
 loglevel=info
 
+[program:buildr-1]
+<% if node.chef_environment == "LIVE" or node.chef_environment == "DEV" %>
+command=/usr/bin/python /usr/local/bin/buildr.py --port=8001 --riak_host=<%= @contact_node %> --riak_pb_port=<%= @contact_node_port %>
+<% else %>
+command=/usr/bin/python /usr/local/bin/buildr.py
+<% end %>
+directory=/home/buildr
+user=root
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/var/log/buildr.log
+loglevel=info
