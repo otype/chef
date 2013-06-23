@@ -24,6 +24,15 @@ directory "/var/chroot/haproxy" do
   not_if {File.exists?("/var/chroot/haproxy")}
 end
 
+directory "/var/lib/haproxy" do
+  mode "0755"
+  owner "root"
+  group "root"
+  action :create
+  recursive true
+  not_if {File.exists?("/var/lib/haproxy")}
+end
+
 # We don't run all this if we already have a generated config by haproxy-config.py!
 if haproxy_config_installed.empty?
 
