@@ -1,0 +1,8 @@
+[program:myip]
+command=/usr/bin/python /usr/local/bin/myip_runner.py
+user=root
+directory=/home/myip
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/var/log/myip.log
+loglevel=info
