@@ -1,5 +1,5 @@
 [program:deployr]
-command=/usr/local/bin/celery worker -A pydeployr.deployr_tasks -l info
+command=/usr/local/bin/celery worker -A pytools.pydeployr.deployr_tasks -l info
 user=root
 directory=/home/deployr
 autorestart=true
