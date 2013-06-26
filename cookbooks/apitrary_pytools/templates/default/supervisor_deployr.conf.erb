@@ -1,8 +1,8 @@
-[program:deployr_<%= @deployr_mode%>]
-command=/usr/bin/python /usr/bin/deployr.py --mode=<%= @deployr_mode%>
-directory=/home/deployr
+[program:deployr]
+command=/usr/local/bin/celery worker -A pydeployr.deployr_tasks -l info
 user=root
+directory=/home/deployr
 autorestart=true
 redirect_stderr=true
-stdout_logfile=/var/log/deployr_<%= @deployr_mode%>.log
+stdout_logfile=/var/log/deployr.log
 loglevel=info

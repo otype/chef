@@ -2,6 +2,7 @@
 # Recipe:: default
 # Author:: Joe Williams <joe@joetify.com>
 # Author:: Matt Ray <matt@opscode.com>
+# Author:: Hector Castro <hector@basho.com>
 #
 # Copyright 2008-2009, Joe Williams
 # Copyright 2011, Opscode Inc.
@@ -19,21 +20,4 @@
 # limitations under the License.
 #
 
-case node[:platform]
-when "debian", "ubuntu"
-  erlpkg = node[:erlang][:gui_tools] ? "erlang" : "erlang-nox"
-  package erlpkg
-  package "erlang-dev"
-when "redhat", "centos", "scientific"
-  include_recipe "yum::epel"
-  yum_repository "erlang" do
-    name "EPELErlangrepo"
-    url "http://repos.fedorapeople.org/repos/peter/erlang/epel-5Server/$basearch"
-    description "Updated erlang yum repository for RedHat / Centos 5.x - #{node['kernel']['machine']}"
-    action :add
-    only_if { node[:platform_version].to_f >= 5.0 && node[:platform_version].to_f < 6.0 }
-  end
-  package "erlang"
-else
-  package "erlang"
-end
+include_recipe "erlang::#{node["erlang"]["install_method"]}"

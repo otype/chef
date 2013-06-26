@@ -7,77 +7,15 @@
 # All rights reserved - Do Not Redistribute
 #
 include_recipe "user::default"
-include_recipe "supervisor"
+include_recipe "supervisor::default"
+include_recipe "apitrary_pytools::default"
+include_recipe "apitrary_pytools::pytools"
 
 user_account 'deployr' do
   comment   'Deployr User'
   home      '/home/deployr'
   shell     '/usr/sbin/nologin'
   not_if {File.exists?("/home/deployr")}
-end
-
-#template "/home/deployr/.ssh/config" do
-#  source "ssh_config.erb"
-#  mode 0644
-#  owner "deployr"
-#  group "deployr"
-#end
-#
-#template "/home/deployr/.ssh/live-bitbucket-ro" do
-#  source "live-bitbucket-ro.erb"
-#  mode 0600
-#  owner "deployr"
-#  group "deployr"
-#end
-#
-#template "/home/deployr/.ssh/live-bitbucket-ro.pub" do
-#  source "live-bitbucket-ro.pub.erb"
-#  mode 0644
-#  owner "deployr"
-#  group "deployr"
-#end
-#
-#template "/home/deployr/.ssh/apitrary-staging-deploy" do
-#  source "apitrary-staging-deploy.erb"
-#  mode 0600
-#  owner "deployr"
-#  group "deployr"
-#end
-#
-#template "/home/deployr/.ssh/apitrary-staging-deploy.pub" do
-#  source "apitrary-staging-deploy.pub.erb"
-#  mode 0644
-#  owner "deployr"
-#  group "deployr"
-#end
-#
-#execute "remove deployment dir" do
-#  command "rm -rf #{node['apitrary_pytools']['deployr']['deployment_dir']}"
-#  user "root"
-#  only_if {File.exists?(node['apitrary_pytools']['deployr']['deployment_dir'])}
-#end
-#
-#git "#{node['apitrary_pytools']['deployr']['deployment_dir']}" do
-#  repository "#{node['apitrary_pytools']['deployr']['repo']}"
-#  revision "master"
-#  #action :sync
-#  action :export
-#  user "deployr"
-#end
-#
-#execute "pip_install" do
-#  user "root"
-#  command "cd #{node['apitrary_pytools']['deployr']['deployment_dir']} && python setup.py install"
-#end
-
-execute "pip-install-deployr" do
-  #command "pip install --upgrade git+ssh://git@github.com/apitrary/pygenapi.git@#{node[:tagname]}"
-  command "pip install --upgrade git+ssh://git@github.com/apitrary/deployr.git"
-  user "root"
-  #action :nothing
-  #unless node.has_key?("nctest")
-  #  notifies :run, "execute[nodecontroller-add]", :immediately
-  #end
 end
 
 directory "/etc/deployr" do
@@ -94,38 +32,17 @@ template "/etc/deployr/deployr.conf" do
   notifies :run, 'execute[supervisor_deployr_add]', :immediately
 end
 
-if node['roles'].include?("loadbalancer")
-  template "/etc/supervisor.d/deployr_balance.conf" do
-    source "supervisor_deployr.conf.erb"
-    mode 0644
-    owner "root"
-    group "root"
-    variables(
-        :deployr_mode => node['deployr']['deploy_mode']
-    )
-    notifies :run, 'execute[supervisor_deployr_add]', :immediately
-  end
-  execute "supervisor_deployr_add" do
-    user "root"
-    command "supervisorctl stop deployr_balance ; supervisorctl remove deployr_balance ; supervisorctl reread && supervisorctl add deployr_balance"
-    action :nothing
-  end
-else
-  template "/etc/supervisor.d/deployr_deploy.conf" do
-    source "supervisor_deployr.conf.erb"
-    mode 0644
-    owner "root"
-    group "root"
-    variables(
-        :deployr_mode => node['deployr']['deploy_mode']
-    )
-    notifies :run, 'execute[supervisor_deployr_add]', :immediately
-  end
-  execute "supervisor_deployr_add" do
-    user "root"
-    command "supervisorctl stop deployr_deploy ; supervisorctl remove deployr_deploy ; supervisorctl reread && supervisorctl add deployr_deploy"
-    action :nothing
-  end
+template "/etc/supervisor/conf.d/deployr.conf" do
+  source "supervisor_deployr.conf.erb"
+  mode 0644
+  owner "root"
+  group "root"
+  notifies :run, 'execute[supervisor_deployr_add]', :immediately
+end
+execute "supervisor_deployr_add" do
+  user "root"
+  command "supervisorctl stop deployr ; supervisorctl remove deployr ; supervisorctl reread && supervisorctl add deployr"
+  action :nothing
 end
 
 execute "supervisor_deployr_restart" do

@@ -16,6 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+# epel repository is needed for the fail2ban package on rhel
+if platform_family?("rhel")
+  include_recipe "yum::epel"
+end
+
 package "fail2ban" do
   action :upgrade
 end

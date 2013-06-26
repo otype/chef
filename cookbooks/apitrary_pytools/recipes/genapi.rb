@@ -7,7 +7,8 @@
 # All rights reserved - Do Not Redistribute
 #
 include_recipe "user::default"
-include_recipe "supervisor"
+include_recipe "supervisor::default"
+include_recipe "apitrary_pytools::default"
 
 user_account 'genapi' do
   comment   'Genapi User'
@@ -16,31 +17,14 @@ user_account 'genapi' do
   not_if {File.exists?("/home/genapi")}
 end
 
-#execute "remove deployment dir" do
-#  command "rm -rf #{node['apitrary_pytools']['genapi']['deployment_dir']}"
-#  user "root"
-#  only_if {File.exists?(node['apitrary_pytools']['genapi']['deployment_dir'])}
-#end
-
-#git "#{node['apitrary_pytools']['genapi']['deployment_dir']}" do
-#  repository "#{node['apitrary_pytools']['genapi']['repo']}"
-#  revision "master"
-#  #action :sync
-#  action :export
-#  user "genapi"
-#end
-#
-#execute "pip_install" do
-#  user "root"
-#  command "cd #{node['apitrary_pytools']['genapi']['deployment_dir']} && python setup.py install"
-#end
-
 execute "pip-install-genapi" do
   #command "pip install --upgrade git+ssh://git@github.com/apitrary/pygenapi.git@#{node[:tagname]}"
-  command "pip install --upgrade git+ssh://git@github.com/apitrary/pygenapi.git"
+  command "pip install git+ssh://git@github.com/apitrary/pygenapi.git"
   user "root"
-  #action :nothing
-  #unless node.has_key?("nctest")
-  #  notifies :run, "execute[nodecontroller-add]", :immediately
-  #end
+  not_if {File.exists?("/usr/local/bin/genapi.py")}
+end
+
+execute "pip-install-pycurl" do
+  command "pip install pycurl"
+  user "root"
 end

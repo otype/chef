@@ -8,6 +8,11 @@
 #
 include_recipe "haproxy::default"
 
+%w{libcurl4-openssl-dev build-essential libpcre3-dev libssl0.9.8}.each do |pkg|
+  package pkg
+end
+
+
 haproxy_config_installed = `cat /etc/haproxy/haproxy.cfg | grep "# REMOVE THIS LINE HERE, THEN RESTART chef-client"`
 
 directory "/var/chroot/haproxy" do
@@ -17,6 +22,15 @@ directory "/var/chroot/haproxy" do
   action :create
   recursive true
   not_if {File.exists?("/var/chroot/haproxy")}
+end
+
+directory "/var/lib/haproxy" do
+  mode "0755"
+  owner "root"
+  group "root"
+  action :create
+  recursive true
+  not_if {File.exists?("/var/lib/haproxy")}
 end
 
 # We don't run all this if we already have a generated config by haproxy-config.py!
@@ -39,7 +53,7 @@ if haproxy_config_installed.empty?
     end
   end
 
-  %w{frontends/http_proxy backends/launchpad_cluster backends/www_cluster listen/admin}.each do |dir|
+  %w{frontends/http_proxy listen/admin frontends/riak_rest backends/riak_rest_backend backends/riak_protocol_buffer_backend frontends/riak_protocol_buffer}.each do |dir|
     directory "/etc/haproxy/#{dir}" do
       mode "0755"
       owner "root"
@@ -79,48 +93,32 @@ if haproxy_config_installed.empty?
     mode 0644
   end
 
-  template "/etc/haproxy/frontends/http_proxy/10-www" do
-    source "frontends-tpl.erb"
+  template "/etc/haproxy/backends/riak_rest_backend/100-riak_rest_backend" do
+    source "backends-100-riak-rest-backend.erb"
     owner "root"
     group "root"
     mode 0644
   end
 
-  template "/etc/haproxy/frontends/http_proxy/20-launchpad" do
-    source "frontends-tpl.erb"
+  template "/etc/haproxy/backends/riak_protocol_buffer_backend/100-riak_protocol_buffers_backend" do
+    source "backends-100-riak-protocol-buffer-backend.erb"
     owner "root"
     group "root"
     mode 0644
-    variables(
-        :subdomain => "launchpad",
-        :webacl => "launchpad"
-    )
   end
 
-  # We need this temporarily before we switch our old LIVE apitrary.com to the new server.
-  web_nodes = search(:node, "chef_environment:#{node.chef_environment} AND role:railsweb")
-
-  template "/etc/haproxy/backends/launchpad_cluster/00-base" do
-    source "backends-tpl.erb"
+  template "/etc/haproxy/frontends/riak_rest/10-riak_rest" do
+    source "frontends-10-riak-rest.erb"
     owner "root"
     group "root"
     mode 0644
-    variables(
-        :webacl => "launchpad",
-        :subdomain => "launchpad",
-        :webnodes => web_nodes
-    )
   end
 
-  template "/etc/haproxy/backends/www_cluster/00-base" do
-    source "backends-tpl.erb"
+  template "/etc/haproxy/frontends/riak_protocol_buffer/10-riak_protocol_buffer" do
+    source "frontends-10-riak-protocol-buffer.erb"
     owner "root"
     group "root"
     mode 0644
-    variables(
-        :webacl => "www",
-        :webnodes => web_nodes
-    )
   end
 
   service "haproxy" do
