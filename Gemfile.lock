@@ -20,10 +20,20 @@ GEM
       treetop (~> 1.4.9)
       uuidtools
       yajl-ruby (~> 1.1)
+    chef-zero (1.5.1)
+      hashie (~> 2.0)
+      json
+      mixlib-log (~> 1.3)
+      moneta (< 0.7.0)
+      puma (~> 1.6)
     erubis (2.7.0)
+    hashie (2.0.5)
     highline (1.6.15)
     ipaddress (0.8.0)
     json (1.6.1)
+    knife-essentials (1.5.3)
+      chef
+      chef-zero (>= 1.5)
     mime-types (1.19)
     mixlib-authentication (1.3.0)
       mixlib-log
@@ -46,6 +56,9 @@ GEM
       systemu
       yajl-ruby
     polyglot (0.3.3)
+    puma (1.6.3)
+      rack (~> 1.2)
+    rack (1.5.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     systemu (2.5.2)
@@ -60,3 +73,4 @@ PLATFORMS
 
 DEPENDENCIES
   chef
+  knife-essentials

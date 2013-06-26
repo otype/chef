@@ -16,7 +16,9 @@
     "apt": ">= 0.0.0",
     "yum": ">= 0.0.0",
     "build-essential": ">= 0.0.0",
-    "erlang": ">= 0.0.0"
+    "erlang": ">= 0.0.0",
+    "git": ">= 0.0.0",
+    "ulimit": ">= 0.0.0"
   },
   "recommendations": {
   },
@@ -36,5 +38,5 @@
     "riak": "Installs Riak from a package",
     "riak::source": "Installs Erlang and Riak from source"
   },
-  "version": "1.3.0"
+  "version": "2.0.1"
 }

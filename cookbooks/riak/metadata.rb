@@ -17,19 +17,19 @@
 # limitations under the License.
 #
 
+name              "riak"
 maintainer        "Basho Technologies, Inc."
 maintainer_email  "riak@basho.com"
 license           "Apache 2.0"
 description       "Installs and configures Riak distributed data store"
-version           "1.3.0"
-depends           "apt"
-depends           "yum"
-depends           "build-essential"
-depends           "erlang"
+version           "2.0.1"
 
 recipe            "riak", "Installs Riak from a package"
 recipe            "riak::source", "Installs Erlang and Riak from source"
 
+%w{apt yum build-essential erlang git ulimit}.each do |d|
+  depends d
+end
 
 %w{ubuntu debian centos redhat fedora}.each do |os|
   supports os

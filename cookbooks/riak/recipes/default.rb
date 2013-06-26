@@ -17,6 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+include_recipe "ulimit"
 
 version_str = "#{node['riak']['package']['version']['major']}.#{node['riak']['package']['version']['minor']}"
 base_uri = "#{node['riak']['package']['url']}/#{version_str}/#{version_str}.#{node['riak']['package']['version']['incremental']}/"
@@ -57,7 +58,7 @@ else
       action :install
     end
 
-  when "centos", "rhel"
+  when "centos", "redhat"
     include_recipe "yum"
 
     yum_key "RPM-GPG-KEY-basho" do
@@ -97,12 +98,18 @@ file "#{node['riak']['package']['config_dir']}/app.config" do
   content Eth::Config.new(node['riak']['config'].to_hash).pp
   owner "root"
   mode 0644
+  notifies :restart, "service[riak]"
 end
 
 file "#{node['riak']['package']['config_dir']}/vm.args" do
   content Eth::Args.new(node['riak']['args'].to_hash).pp
   owner "root"
   mode 0644
+  notifies :restart, "service[riak]"
+end
+
+user_ulimit "riak" do
+  filehandle_limit node['riak']['limits']['nofile']
 end
 
 node['riak']['patches'].each do |patch|
@@ -117,7 +124,5 @@ end
 
 service "riak" do
   supports :start => true, :stop => true, :restart => true
-  action [ :enable ]
-  subscribes :restart, resources(:file => [ "#{node['riak']['package']['config_dir']}/app.config",
-                                   "#{node['riak']['package']['config_dir']}/vm.args" ])
+  action [ :enable, :start ]
 end

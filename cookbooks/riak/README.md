@@ -1,5 +1,6 @@
 Riak Cookbook
 =============
+[![Build Status](https://travis-ci.org/basho/riak-chef-cookbook.png)](https://travis-ci.org/basho/riak-chef-cookbook)
 
 Overview
 ========
@@ -22,7 +23,7 @@ The package parameters available are version, type and, optionally for source in
 
 	node['riak']['package']['version']['major'] = "1"
 	node['riak']['package']['version']['minor'] = "3"
-	node['riak']['package']['version']['incremental'] = "0"
+	node['riak']['package']['version']['incremental'] = "1"
 
 
 Source Installation

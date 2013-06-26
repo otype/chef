@@ -53,15 +53,15 @@ default['riak']['config']['kernel']['inet_dist_listen_max'] = 7999
 
 # riak_api
 default['riak']['config']['riak_api']['pb_backlog'] = 64
-default['riak']['config']['riak_api']['pb_ip'] = "#{node['ipaddress']}".to_erl_string
+default['riak']['config']['riak_api']['pb_ip'] = node['ipaddress'].to_erl_string
 default['riak']['config']['riak_api']['pb_port'] = 8087
 
 # riak_core
 default['riak']['config']['riak_core']['ring_state_dir'] = "#{platform_data_dir}/ring".to_erl_string
 default['riak']['config']['riak_core']['ring_creation_size'] = 64
-default['riak']['config']['riak_core']['http'] = [["#{node['ipaddress']}".to_erl_string, 8098].to_erl_tuple]
-default['riak']['config']['riak_core']['https'] = [["#{node['ipaddress']}".to_erl_string, 8069].to_erl_tuple]
-default['riak']['config']['riak_core']['ssl'] = [["certfile", "/etc/riak/ssl/server.crt".to_erl_string].to_erl_tuple, ["keyfile", "/etc/riak/ssl/server.key".to_erl_string].to_erl_tuple]
+default['riak']['config']['riak_core']['http'] = [[node['ipaddress'].to_erl_string, 8098].to_erl_tuple]
+#default['riak']['config']['riak_core']['https'] = [["#{node['ipaddress']}".to_erl_string, 8098].to_erl_tuple]
+#default['riak']['config']['riak_core']['ssl'] = [["certfile", "./etc/cert.pem".to_erl_string].to_erl_tuple, ["keyfile", "./etc/key.pem".to_erl_string].to_erl_tuple]
 default['riak']['config']['riak_core']['handoff_port'] = 8099
 #default['riak']['config']['riak_core']['handoff_ssl_options'] = [["certfile", "tmp/erlserver.pem".to_erl_string].to_erl_tuple]
 default['riak']['config']['riak_core']['dtrace_support'] = false
@@ -93,6 +93,7 @@ default['riak']['config']['riak_kv']['http_url_encoding'] = "on"
 default['riak']['config']['riak_kv']['vnode_vclocks'] = true
 default['riak']['config']['riak_kv']['listkeys_backpressure'] = true
 default['riak']['config']['riak_kv']['vnode_mailbox_limit'] = [1, 5000].to_erl_tuple
+default['riak']['config']['riak_kv']['riak_kv_stat'] = true
 
 # riak_kv storage_backend
 default['riak']['config']['riak_kv']['storage_backend'] = "riak_kv_bitcask_backend"
@@ -102,6 +103,19 @@ case node['riak']['config']['riak_kv']['storage_backend']
     default['riak']['config']['bitcask']['data_root'] = "#{platform_data_dir}/bitcask".to_erl_string
   when "riak_kv_eleveldb_backend"
     default['riak']['config']['eleveldb']['data_root'] = "#{platform_data_dir}/leveldb".to_erl_string
+  when "riak_cs_kv_multi_backend"
+    default['riak']['cs_version'] = "1.3.1"
+    if node['platform_family'] == "rhel" && node['kernel']['machine'] == "x86_64"
+       default['riak']['config']['riak_kv']['add_paths'] = ["/usr/lib64/riak-cs/lib/riak_cs-#{node['riak']['cs_version']}/ebin".to_erl_string]
+    else
+       default['riak']['config']['riak_kv']['add_paths'] = ["/usr/lib/riak-cs/lib/riak_cs-#{node['riak']['cs_version']}/ebin".to_erl_string]
+    end
+    prefix_list = ["0b:".to_erl_binary, "be_blocks"]
+    default['riak']['config']['riak_kv']['multi_backend_prefix_list'] = [prefix_list.to_erl_tuple]
+    default['riak']['config']['riak_kv']['multi_backend_default'] = "be_default"
+    be_default = ["be_default", "riak_kv_eleveldb_backend", {"data_root" => "#{platform_data_dir}/leveldb".to_erl_string, "max_open_files" => 50}]
+    be_blocks = ["be_blocks", "riak_kv_bitcask_backend", {"data_root" => "#{platform_data_dir}/bitcask".to_erl_string}]
+    default['riak']['config']['riak_kv']['multi_backend'] = [be_default.to_erl_tuple, be_blocks.to_erl_tuple]
 end
 
 # riak_search
@@ -136,10 +150,13 @@ default['riak']['config']['sasl']['sasl_error_logger'] = false
 default['riak']['config']['sasl']['utc_log'] = true
 
 # riak_control
-default['riak']['config']['riak_control']['enabled'] = true
+default['riak']['config']['riak_control']['enabled'] = false
 default['riak']['config']['riak_control']['auth'] = "userlist"
-default['riak']['config']['riak_control']['userlist'] = [["apitraryadmin".to_erl_string,"aix9mio6ahtaeHai5eeshi2va".to_erl_string].to_erl_tuple]
+default['riak']['config']['riak_control']['userlist'] = [["user".to_erl_string,"pass".to_erl_string].to_erl_tuple]
 default['riak']['config']['riak_control']['admin'] = true
+
+# limits
+default['riak']['limits']['nofile'] = 4096
 
 #patches
 default['riak']['patches'] = []
