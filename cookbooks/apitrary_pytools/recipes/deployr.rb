@@ -39,6 +39,7 @@ template "/etc/supervisor/conf.d/deployr.conf" do
   group "root"
   notifies :run, 'execute[supervisor_deployr_add]', :immediately
 end
+
 execute "supervisor_deployr_add" do
   user "root"
   command "supervisorctl stop deployr ; supervisorctl remove deployr ; supervisorctl reread && supervisorctl add deployr"
