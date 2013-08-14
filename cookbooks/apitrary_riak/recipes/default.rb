@@ -16,7 +16,7 @@ end
 
 execute "clone_riak_mapreduce_utils" do
   user "root"
-  command "cd /usr/src && git clone git@github.com:whitenode/riak_mapreduce_utils.git"
+  command "cd /usr/src && git clone https://github.com/whitenode/riak_mapreduce_utils.git"
   notifies :run, "execute[compile_riak_mapreduce_utils]"
   not_if {File.exists?("/usr/src/riak_mapreduce_utils")}
 end
