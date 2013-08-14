@@ -17,6 +17,12 @@ user_account 'genapi' do
   not_if {File.exists?("/home/genapi")}
 end
 
+execute "pip-install-tornado-riak" do
+  command "pip install git+ssh://git@github.com/apitrary/tornado-riak.git"
+  user "root"
+  #not_if {File.exists?("/usr/local/bin/genapi.py")}
+end
+
 execute "pip-install-genapi" do
   #command "pip install --upgrade git+ssh://git@github.com/apitrary/pygenapi.git@#{node[:tagname]}"
   command "pip install git+ssh://git@github.com/apitrary/pygenapi.git"
