@@ -14,6 +14,19 @@ directory "/usr/lib/riak/lib/external" do
   not_if {File.exists?("/usr/lib/riak/lib/external")}
 end
 
+template "/etc/sysctl.d/60-riak.conf" do
+  source "etc-sysctld-60-riak.conf.erb"
+  mode 0644
+  owner "root"
+  group "root"
+  notifies :run, 'execute[sysctl-load]', :immediately
+end
+
+execute "sysctl-load" do
+  user "root"
+  command "/sbin/sysctl -p /etc/sysctl.d/60-riak.conf"
+end
+
 execute "clone_riak_mapreduce_utils" do
   user "root"
   command "cd /usr/src && git clone https://github.com/whitenode/riak_mapreduce_utils.git"
