@@ -53,5 +53,5 @@ template "/etc/haproxy/haproxy.cfg" do
 
   # THIS HERE IS IMPORTANT!! The deployr writes to this
   # config ... we don't want chef to overwrite the working config!!!!
-  #not_if {File.exists?("/etc/haproxy/haproxy.cfg")}
+  # not_if {File.exists?("/etc/haproxy/haproxy.cfg")}
 end

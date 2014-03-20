@@ -6,6 +6,6 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-service "ssh" do
-  action :restart
-end
+# service "ssh" do
+#   action :restart
+# end
