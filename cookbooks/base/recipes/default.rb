@@ -15,3 +15,10 @@ user_account 'devops' do
   home      '/home/devops'
   password  '$6$a5MU7yv7$B77rRir/VqERzqDD.ynlpcyOyBWbBFQS6YkK.5bKlyA6YqdEugyZRjMpRomrCGSk6pJWKOMBulzU/jFJaIuaY/'
 end
+
+template "/etc/cron.daily/autoupdate.sh" do
+  source "autoupdate.sh.erb"
+  mode 0755
+  owner "root"
+  group "root"
+end

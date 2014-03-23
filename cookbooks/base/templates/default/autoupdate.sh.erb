@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# A script to run Aptitude and install any upgrades automatically.
+# Add this to /etc/cron.daily to run the script every 24 hours.
+
+# This prevents "TERM is not set, so the dialog frontend is not usable." error
+PATH="$PATH:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+
+aptitude update
+aptitude safe-upgrade -y
+aptitude autoclean
